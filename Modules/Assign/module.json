@@ -1,0 +1,13 @@
+{
+    "name": "Assign",
+    "alias": "assign",
+    "description": "",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\Assign\\Providers\\AssignServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

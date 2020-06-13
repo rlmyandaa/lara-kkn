@@ -24,9 +24,17 @@ class UserController extends Controller
     public function index()
     {
         $user = Auth::user();
-
+        
         if ($user->isAdmin()) {
             return view('pages.admin.home');
+        }
+
+        if ($user->hasRole('dosen')) { // you can pass an id or slug
+            return redirect('/dosen');
+        }
+        
+        if ($user->hasRole('student')) { // you can pass an id or slug
+            return redirect('/student');
         }
 
         return view('pages.user.home');

@@ -87,7 +87,7 @@
                 <div class="title m-b-md">
                     {!! trans('titles.app') !!}<br />
                     <small>
-                        {{ trans('titles.app2', ['version' => config('settings.app_project_version')]) }}
+                        LARA_KKN 1
                     </small>
                 </div>
                 <div class="links">
