@@ -18,7 +18,7 @@ class ProfileController extends Controller
         $user = Auth::user();
         $user_id = $user['id'];
 
-        $data = DB::table('faculty_dosen')->where('dosen_id', $user_id)->get();
+        $data = DB::table('app-faculty_dosen')->where('dosen_id', $user_id)->get();
         /**echo "<script type='text/javascript'>alert('$data');</script>";*/
         return view('dosen::pages.profile.profile', ['data' => $data]);
     }
@@ -33,7 +33,7 @@ class ProfileController extends Controller
         $user = Auth::user();
         $user_id = $user['id'];
         $user_mail = $user['email'];
-        DB::table('faculty_dosen')->insert([
+        DB::table('app-faculty_dosen')->insert([
             'dosen_id' => $user_id,
             'name' => $request->nama,
             'nip' => $request->nip,
@@ -62,7 +62,7 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $user_id = $user['id'];
-        $data = DB::table('faculty_dosen')->where('dosen_id', $user_id)->get();
+        $data = DB::table('app-faculty_dosen')->where('dosen_id', $user_id)->get();
         return view('dosen::pages.profile.profile-edit', ['data' => $data]);
     }
 
@@ -76,7 +76,7 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $user_id = $user['id'];
-        DB::table('faculty_dosen')->where('dosen_id', $user_id)->update([
+        DB::table('app-faculty_dosen')->where('dosen_id', $user_id)->update([
             'name' => $request->nama,
             'nip' => $request->nip,
             'gender' => $request->gender,

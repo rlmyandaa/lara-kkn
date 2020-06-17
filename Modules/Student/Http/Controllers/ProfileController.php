@@ -19,7 +19,7 @@ class ProfileController extends Controller
         $user = Auth::user();
         $user_id = $user['id'];
 
-        $data = DB::table('faculty_student')->where('student_id', $user_id)->get();
+        $data = DB::table('app-faculty_student')->where('student_id', $user_id)->get();
         /**echo "<script type='text/javascript'>alert('$data');</script>";*/
         return view('student::pages.profile.profile', ['data' => $data]);
     }
@@ -42,7 +42,7 @@ class ProfileController extends Controller
         $user = Auth::user();
         $user_id = $user['id'];
         $user_mail = $user['email'];
-        DB::table('faculty_student')->insert([
+        DB::table('app-faculty_student')->insert([
             'student_id' => $user_id,
             'name' => $request->nama,
             'nim' => $request->nim,
@@ -65,7 +65,7 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $user_id = $user['id'];
-        $data = DB::table('faculty_student')->where('student_id', $user_id)->get();
+        $data = DB::table('app-faculty_student')->where('student_id', $user_id)->get();
         return view('student::pages.profile.profile-edit', ['data' => $data]);
     }
 
@@ -79,7 +79,7 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $user_id = $user['id'];
-        DB::table('faculty_student')->where('student_id', $user_id)->update([
+        DB::table('app-faculty_student')->where('student_id', $user_id)->update([
             'name' => $request->nama,
             'nim' => $request->nim,
             'gender' => $request->gender,

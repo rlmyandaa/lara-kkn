@@ -19,7 +19,7 @@ class GroupController extends Controller
     {
         $user = Auth::user();
         $user_id = $user['id'];
-        $data = DB::table('faculty_student')->where('student_id', $user_id)->value('group_id');
+        $data = DB::table('app.faculty_student')->where('student_id', $user_id)->value('group_id');
         if ($data === NULL) {
             echo "<script type='text/javascript'>
                 alert('Anda belum terhubung dengan kelompok, masukkan token terlebih dahulu.');
