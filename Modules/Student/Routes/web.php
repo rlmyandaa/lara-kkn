@@ -19,7 +19,12 @@ Route::prefix('student')->group(function() {
     Route::post('/profile/update', 'ProfileController@update')->name('student.profile-update');
 
     Route::get('/group', 'GroupController@index')->name('student.group');
+    Route::post('/group/token-update', 'GroupController@token_update')->name('student.group-token-update');
+
+
     Route::get('/proposal', 'ProposalController@index')->name('student.proposal');
+
+    
 });
 
 

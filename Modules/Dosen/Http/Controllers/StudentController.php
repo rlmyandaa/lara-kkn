@@ -74,8 +74,12 @@ class StudentController extends Controller
         $mentor_id = DB::table('app-faculty_student-group')->where('unique_id', $id)->value('group_mentor_id');
         $dosen = DB::table('app-faculty_dosen')->where('dosen_id', $mentor_id)->get();
         $data = DB::table('app-faculty_student-group')->where('unique_id', $id)->get();
-        echo "<script type='text/javascript'>alert('$mentor_id');</script>";
-        return view('dosen::pages.student.detail.group-detail', compact('data', 'dosen'));
+        /**echo "<script type='text/javascript'>alert('$mentor_id');</script>";*/
+        $member_data = DB::table('app-faculty_student')->where('group_uid', $id)->orderBy('name', 'asc')->get();
+        
+        return view('dosen::pages.student.detail.group-detail', compact('data', 'dosen','member_data'));
+
+
     }
 
     public function detail_edit($id)
@@ -85,8 +89,19 @@ class StudentController extends Controller
         return view('dosen::pages.student.detail.group-detail-edit', ['data' => $data]);
     }
 
-    public function detail_update()
+    public function detail_update(Request $request)
     {
-
+        $uid=$request->unique_id;
+        DB::table('app-faculty_student-group')->where('unique_id', $request->unique_id)->update([
+            'group_name' => $request->group_name,
+            'village_name' => $request->village_name,
+            'member_count' => $request->member_count,
+            'village_center_address' => $request->village_center_address,
+            'village_head_name' => $request->village_head_name,
+            'village_head_phone' => $request->village_head_phone,
+            'babinsa_name' => $request->babinsa_name,
+            'babinsa_phone' => $request->babinsa_phone
+        ]);
+        return redirect("/dosen/student/detail/{$uid}");
     }
 }

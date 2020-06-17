@@ -56,7 +56,39 @@
     </table>
     <a type="button" class="btn btn-primary" href="/dosen/student/detail/edit/{{ $d->unique_id }}">Edit Detail</a>
 </div>
+<br />
+<div class="card">
+    <div class="card-header">
+        Anggota Kelompok
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <th>No</th>
+                <th>Nama</th>
+                <th>No. Telepon</th>
+            </thead>
+            <?php
+            $count = 0;
+            ?>
 
+            <tbody>
+                @foreach($member_data as $md)
+                <tr>
+                    <td>
+                        <?php
+                        echo ($count = $count + 1);
+                        ?>
+                    </td>
+                    <td>{{ $md->name }}</td>
+                    <td>{{ $md->phone }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+
+        </table>
+    </div>
+</div>
 
 
 @endsection

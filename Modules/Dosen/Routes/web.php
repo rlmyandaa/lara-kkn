@@ -25,7 +25,7 @@ Route::prefix('dosen')->group(function() {
 
     Route::get('/student/detail/{id}', 'StudentController@detail')->name('dosen.student-group-detail');
     Route::get('/student/detail/edit/{id}', 'StudentController@detail_edit')->name('dosen.student-group-detail-edit');
-    Route::get('/student/detail/update', 'StudentController@detail_update')->name('dosen.student-group-detail-update');    
+    Route::post('/student/detail/update', 'StudentController@detail_update')->name('dosen.student-group-detail-update');    
 
     Route::get('/student/token/{id}', 'StudentController@token')->name('dosen.student-group-token');
     Route::post('/student/token/update', 'StudentController@token_update')->name('dosen.student-group-token-update');

@@ -6,6 +6,7 @@
 @foreach ($data as $d)
 <form action={{ route('dosen.student-group-detail-update') }} method="post">
     {{ csrf_field() }}
+    <input type="hidden" name="unique_id" value="{{ $d->unique_id }}"> <br />
     <div class="form-group">
         <label>Nama Kelompok</label>
         <input type="text" class="form-control" name="group_name" required="required" placeholder="Masukkan Nama Kelompok" value="{{ $d->group_name }}"> <br />
