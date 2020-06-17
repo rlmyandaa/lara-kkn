@@ -1,13 +1,14 @@
 <?php
 
 namespace Modules\Student\Http\Controllers;
-use Auth;
+
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Auth;
 use Illuminate\Support\Facades\DB;
 
-class ProposalController extends Controller
+class ProkerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +18,7 @@ class ProposalController extends Controller
     {
         $user = Auth::user();
         $user_id = $user['id'];
-        $data = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_id');
+        $data = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_uid');
         if ($data === NULL) {
             echo "<script type='text/javascript'>
                 alert('Anda belum terhubung dengan kelompok, masukkan token terlebih dahulu.');
@@ -25,9 +26,8 @@ class ProposalController extends Controller
             return view('student::pages.group.group-assign');
         }
         else {
-            return view('student::index');
+            return view('student::pages.proker.proker-index');
         }
-
     }
 
     /**

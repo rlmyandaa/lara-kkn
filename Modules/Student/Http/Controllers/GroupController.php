@@ -31,7 +31,7 @@ class GroupController extends Controller
             $data = DB::table('app-faculty_student-group')->where('unique_id', $check)->get();
 
             $member_data = DB::table('app-faculty_student')->where('group_uid', $check)->orderBy('name', 'asc')->get();
-            echo "<script type='text/javascript'>alert('$member_data');</script>";
+
             return view('student::pages.group.group', compact('data', 'dosen', 'member_data'));
         }
     }
@@ -58,9 +58,7 @@ class GroupController extends Controller
         ]);
         $member = DB::table('app-faculty_student-group')->where('token', $token)->value('member_registered');
         $member = $member + 1;
-        echo "<script type='text/javascript'>
-                alert('$member');
-            </script>";
+       
         DB::table('app-faculty_student-group')->where('token', $token)->update([
             'member_registered' => $member
         ]);

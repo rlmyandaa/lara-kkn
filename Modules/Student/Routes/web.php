@@ -22,7 +22,7 @@ Route::prefix('student')->group(function() {
     Route::post('/group/token-update', 'GroupController@token_update')->name('student.group-token-update');
 
 
-    Route::get('/proposal', 'ProposalController@index')->name('student.proposal');
+    Route::get('/proker', 'ProkerController@index')->name('student.proker');
 
     
 });

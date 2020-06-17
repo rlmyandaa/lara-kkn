@@ -29,4 +29,6 @@ Route::prefix('dosen')->group(function() {
 
     Route::get('/student/token/{id}', 'StudentController@token')->name('dosen.student-group-token');
     Route::post('/student/token/update', 'StudentController@token_update')->name('dosen.student-group-token-update');
+
+    Route::get('/proker', 'ProkerController@index')->name('dosen.student-proker');
 });
