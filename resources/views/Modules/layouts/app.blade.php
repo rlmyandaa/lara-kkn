@@ -24,6 +24,7 @@
     @yield('template_linked_fonts')
 
     {{-- Styles --}}
+    
     <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
 
     @yield('template_linked_css')
@@ -40,7 +41,11 @@
             ]) !!
         };
     </script>
-
+    <script src="{{ mix('/js/app.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+   
+    @stack('styles_addon')
+    @stack('scripts_addon')
 
 
     @yield('head')
@@ -68,9 +73,9 @@
                         <div class="card">
                             <div class="card-header">
                                 @if (Auth::User()->hasRole('student'))
-                                    @include('modules.partials.student-menu')
+                                @include('modules.partials.student-menu')
                                 @elseif (Auth::User()->hasRole('dosen'))
-                                    @include('modules.partials.dosen-menu')
+                                @include('modules.partials.dosen-menu')
                                 @endif
                             </div>
 
@@ -79,6 +84,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
 
@@ -88,7 +94,7 @@
     </div>
 
     {{-- Scripts --}}
-    <script src="{{ mix('/js/app.js') }}"></script>
+
 
     @if(config('settings.googleMapsAPIStatus'))
     {!! HTML::script('//maps.googleapis.com/maps/api/js?key='.config("settings.googleMapsAPIKey").'&libraries=places&dummy=.js', array('type' => 'text/javascript')) !!}

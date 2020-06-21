@@ -4,9 +4,11 @@ namespace Modules\Student\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Routing\Controller;
+use App\Http\Controllers\Controller;
 use Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+
 
 class ProkerController extends Controller
 {
@@ -24,69 +26,46 @@ class ProkerController extends Controller
                 alert('Anda belum terhubung dengan kelompok, masukkan token terlebih dahulu.');
             </script>";
             return view('student::pages.group.group-assign');
-        }
-        else {
+        } else {
             return view('student::pages.proker.proker-index');
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Response
-     */
-    public function create()
+
+    public function list()
     {
-        return view('student::create');
+        $user = Auth::user();
+        $user_id = $user['id'];
+        $check = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_uid');
+        
+        $ls_pending = DB::table('app-proker-propose_pending')->where('group_uid', $check)->get();
+        
+        return view('student::pages.proker.list.proker-list', ['ls_pending' => $ls_pending]);
+    }
+    public function list_pending_remove($id)
+    {
+        $fileName = DB::table('app-proker-propose_pending')->where('proker_uid', $id)->value('proker_filename');
+        DB::table('app-proker-propose_pending')->where('proker_uid', $id)->delete();
+        $path = 'Proker/Proposed-Pending/'.$fileName;
+        Storage::delete($path);
+        return redirect()->route('student.proker-list');
+
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Response
-     */
-    public function store(Request $request)
+
+    public function daily_report()
     {
-        //
     }
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Response
-     */
-    public function show($id)
+
+    public function final_report()
     {
-        return view('student::show');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        return view('student::edit');
-    }
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        //
+    public function download($id){
+        $path = 'Proker/Proposed-Pending/'.$id;
+        return Storage::download($path);
     }
 }
