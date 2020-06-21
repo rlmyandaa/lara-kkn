@@ -75,6 +75,10 @@ Route::group(['prefix' => 'student', 'middleware' => 'auth'], function () {
     |--------------------------------------------------------------------------
     */
     Route::group([], function () {
-        Route::get('/proker/final-report', 'ProkerController@final_report')->name('student.proker-final_report');
+        Route::get('/proker/final-report', 'FinalReportController@status')->name('student.proker-final_report');
+        Route::get('/proker/final-report/submission', 'FinalReportController@submission')->name('student.proker-final_report-submission');
+        Route::post('/proker/final-report/submission/uplload', 'FinalReportController@upload')->name('student.proker-final_report-upload');
+        Route::get('/proker/final-report/detail', 'FinalReportController@detail')->name('student.proker-final_report-detail');
+        Route::get('/proker/final-report/revision', 'FinalReportController@revision')->name('student.proker-final_report-revision');
     });
 });
