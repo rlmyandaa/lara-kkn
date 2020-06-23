@@ -31,16 +31,14 @@
 
                                             <tr>
                                                 <td style="width: 40%">Laporan Diajukan</td>
-                                                @switch($fr_stat)
+                                                @switch($rev_stat)
                                                 @case(0)
                                                 <td style="color: red;"> Belum Mengajukan</td>
                                                 @break
 
-                                                @case(1)
+                                                @default
                                                 <td style="color: green;"> Sudah Diajukan</td>
                                                 @break
-
-                                                @default
 
                                                 @endswitch
 
@@ -90,15 +88,24 @@
                                                 @endswitch
 
                                             </tr>
+                                            
 
 
                                         </tbody>
-                                        @if ($fr_stat==0)
-                                        <td>
-                                            <a type="button" class="btn btn-primary" href={{ route('student.proker-list') }}>Upload Laporan</a>
-                                        </td>
-                                        @endif
+                                        
+                                        
                                     </table>
+                                    @switch($rev_stat)
+                                                @case(0)
+                                                <a type="button" class="btn btn-primary" href={{ route('student.proker-list') }}>Upload Laporan</a>
+                                                @break
+                                                @case(4)
+                                                <a type="button" class="btn btn-warning" href={{ route('student.proker-list') }}>Revisi</a>
+                                                @break
+                                                @default
+                                                
+                                                @break
+                                        @endswitch
                                 </div>
                             </div>
 
