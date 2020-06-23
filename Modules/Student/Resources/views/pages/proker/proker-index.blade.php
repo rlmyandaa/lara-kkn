@@ -4,10 +4,7 @@
 <div>
     <div class="card">
         <div class="card-header">
-            <a type="button" class="btn btn-primary" href=>Pengajuan Proker</a>
-            <a type="button" class="btn btn-primary" href=>Daftar Proker</a>
-            <a type="button" class="btn btn-primary" href=>Laporan Harian</a>
-            <a type="button" class="btn btn-primary" href=>Laporan Akhir</a>
+        @include('student::pages.proker.nav.proker-nav')
         </div>
         <div class="card-body">
 

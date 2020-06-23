@@ -11,20 +11,74 @@
 |
 */
 
-Route::prefix('student')->group(function() {
+Route::group(['prefix' => 'student', 'middleware' => 'auth'], function () {
     Route::get('/', 'StudentController@index')->name('student.home');
-    Route::get('/profile', 'ProfileController@index')->name('student.profile');
-    Route::post('/profile/store', 'ProfileController@store')->name('student.profile-store');
-    Route::get('/profile/edit', 'ProfileController@edit')->name('student.profile-edit');
-    Route::post('/profile/update', 'ProfileController@update')->name('student.profile-update');
 
-    Route::get('/group', 'GroupController@index')->name('student.group');
-    Route::post('/group/token-update', 'GroupController@token_update')->name('student.group-token-update');
+    /*
+    |--------------------------------------------------------------------------
+    | Profile Routes
+    |--------------------------------------------------------------------------
+    */
+    Route::group([], function () {
+        Route::get('/profile', 'ProfileController@index')->name('student.profile');
+        Route::post('/profile/store', 'ProfileController@store')->name('student.profile-store');
+        Route::get('/profile/edit', 'ProfileController@edit')->name('student.profile-edit');
+        Route::post('/profile/update', 'ProfileController@update')->name('student.profile-update');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Group Routes
+    |--------------------------------------------------------------------------
+    | 
+    */
+    Route::group([], function () {
+        Route::get('/group', 'GroupController@index')->name('student.group');
+        Route::post('/group/token-update', 'GroupController@token_update')->name('student.group-token-update');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Proker-Propose Routes
+    |--------------------------------------------------------------------------
+    */
+    Route::group([], function () {
+        Route::get('/proker', 'ProkerController@index')->name('student.proker');
+        Route::get('/proker/propose', 'ProkerProposeController@propose')->name('student.proker-propose');
+        Route::post('/proker/propose/upload', 'ProkerProposeController@propose_upload')->name('student.proker-propose-upload');
+
+        Route::get('/proker/list', 'ProkerController@list')->name('student.proker-list');
+        //cancel pending proposal
+        Route::get('/proker/list/prm/{id}', 'ProkerController@list_pending_remove')->name('student.proker-list-pending-remove');
+        Route::get('/proker/dl/{id}', 'ProkerController@download')->name('student.proker-download');
+    });
 
 
-    Route::get('/proker', 'ProkerController@index')->name('student.proker');
+    /*
+    |--------------------------------------------------------------------------
+    | Proker-Daily Report Routes
+    |--------------------------------------------------------------------------
+    */
+    Route::group([], function () {
+        Route::get('/proker/daily-report', 'DailyReportController@index')->name('student.proker-daily_report');
+        Route::get('/proker/daily-report/add', 'DailyReportController@add')->name('student.proker-daily_report-add');
+        Route::post('/proker/daily-report/upload', 'DailyReportController@upload')->name('student.proker-daily_report-upload');
+        Route::get('/proker/daily-report/detail/{id}', 'DailyReportController@detail')->name('student.proker-daily_report-detail');
+        Route::get('/proker/daily-report/detail/file/{id}', 'DailyReportController@getFile')->name('student.proker-daily_report-getFile');
+        Route::get('/proker/daily-report/delete/{id}', 'DailyReportController@delete')->name('student.proker-daily_report-delete');
+    });
 
-    
+
+    /*
+    |--------------------------------------------------------------------------
+    | Proker-Final Report Routes
+    |--------------------------------------------------------------------------
+    */
+    Route::group([], function () {
+        Route::get('/proker/final-report', 'FinalReportController@status')->name('student.proker-final_report');
+        Route::get('/proker/final-report/submission', 'FinalReportController@submission')->name('student.proker-final_report-submission');
+        Route::post('/proker/final-report/submission/uplload', 'FinalReportController@upload')->name('student.proker-final_report-upload');
+        Route::get('/proker/final-report/detail', 'FinalReportController@detail')->name('student.proker-final_report-detail');
+        Route::get('/proker/final-report/revision', 'FinalReportController@revision')->name('student.proker-final_report-revision');
+    });
 });
-
-
