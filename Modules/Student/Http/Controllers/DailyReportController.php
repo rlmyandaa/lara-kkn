@@ -119,6 +119,7 @@ class DailyReportController extends Controller
         $fileList = Storage::files($folderPath);
         $files = array();
         #check if folder is empty/file not found
+        ###
         if (!empty($fileList)) {
             for ($i = 0; $i < $fileCount; $i++) {
                 $temp = $fileList[$i];
