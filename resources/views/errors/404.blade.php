@@ -41,6 +41,7 @@
         <div class="container">
             <div class="content">
                 <div class="title">Not found.</div>
+                <h2>{{ $exception->getMessage() }}</h2>
             </div>
         </div>
     </body>

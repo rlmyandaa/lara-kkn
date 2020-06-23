@@ -12,6 +12,8 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use DateTime;
 use Validator;
+use Illuminate\Contracts\Encryption\DecryptException;
+
 
 class DailyReportController extends Controller
 {
@@ -68,6 +70,10 @@ class DailyReportController extends Controller
             $paths = [];
             $files = $request->file('files');
             $fileCount = 0;
+
+            $dateNow = str_replace(':', '-', $dateNow);
+
+
             $folderPath = ('Daily Report/') . $gname . ('/') . $dateReportFormatted . ('_') . $dateNow;
             foreach ($files as $file) {
 
@@ -111,29 +117,40 @@ class DailyReportController extends Controller
         $folderPath = DB::table('app-daily_report')->where('report_uid', $id)->value('report_folderpath');
         $filePath = [];
         $fileList = Storage::files($folderPath);
-        for ($i = 0; $i < $fileCount; $i++) {
-            $temp = $fileList[$i];
-            $fileList[$i] = str_replace($folderPath . ('/'), "", $temp);
-            array_push($filePath, encrypt($temp));
-        }
-        $incI = 0;
         $files = array();
-        for ($i = 0; $i < $fileCount; $i++) {
-            $files[$i][0] = $filePath[$i];
-            $files[$i][1] = $fileList[$i];
-            $incI++;
+        #check if folder is empty/file not found
+        if (!empty($fileList)) {
+            for ($i = 0; $i < $fileCount; $i++) {
+                $temp = $fileList[$i];
+                $fileList[$i] = str_replace($folderPath . ('/'), "", $temp);
+                array_push($filePath, encrypt($temp));
+            }
+            $incI = 0;
+            
+            for ($i = 0; $i < $fileCount; $i++) {
+                $files[$i][0] = $filePath[$i];
+                $files[$i][1] = $fileList[$i];
+                $incI++;
+            }
+        } 
+        else {
+            $files[0][0] = "Files not exist.";
+            $files[0][1] = "Files not exist.";
+            
         }
-
-        $files_j = json_encode($files);
-
-
         return view('student::pages.proker.daily_report.daily_report-detail', compact('data', 'gname', 'student', 'files', 'fileCount'));
     }
 
     public function getFile($id)
     {
-        $path = decrypt($id);
+        try {
+            $path = decrypt($id);
+            
+        } catch (DecryptException $e) {
+            abort(404, 'Files not found on server.');
+        }
         return Storage::download($path);
+
     }
 
     public function delete($id)
