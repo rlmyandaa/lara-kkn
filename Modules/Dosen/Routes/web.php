@@ -11,7 +11,7 @@
 |
 */
 
-Route::prefix('dosen')->group(function() {
+Route::group(['prefix' => 'dosen', 'middleware' => ['auth', 'activated', 'role:dosen', 'activity', 'twostep', 'checkblocked']],function() {
     Route::get('/', 'DosenController@index')->name('dosen.home');
     Route::get('/profile', 'ProfileController@index')->name('dosen.profile');
     Route::post('/profile/store', 'ProfileController@store')->name('dosen.profile-store');
@@ -30,5 +30,19 @@ Route::prefix('dosen')->group(function() {
     Route::get('/student/token/{id}', 'StudentController@token')->name('dosen.student-group-token');
     Route::post('/student/token/update', 'StudentController@token_update')->name('dosen.student-group-token-update');
 
-    Route::get('/proker', 'ProkerController@index')->name('dosen.student-proker');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Management-Proker Routes
+    |--------------------------------------------------------------------------
+    */
+    Route::group([], function () {
+        Route::get('/proker', 'ProkerController@index')->name('dosen.management-proker');
+        Route::get('/proker/dl/{id}', 'ProkerController@getFileAcc')->name('dosen.management-getFileAcc');
+        Route::get('/proker/detail/{id}', 'ProkerController@detail')->name('dosen.management-proker-detail');
+        Route::get('/proker/detail/dl/{id}', 'ProkerController@getFilePending')->name('dosen.management-proker-getFile');
+        Route::post('/proker/proposal/', 'ProkerController@proposal_decide')->name('dosen.management-proker-proposal_decide');
+        Route::get('/proker/group-detail/{id}','ProkerController@group_detail')->name('dosen.management-proker-group_detail');
+    });
 });

@@ -9,6 +9,7 @@ use Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class ProkerProposeController extends Controller
 {
@@ -27,8 +28,11 @@ class ProkerProposeController extends Controller
         $check = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_uid');
         $gname = DB::table('app-faculty_student-group')->where('unique_id', $check)->value('group_name');
 
+        $date = Carbon::now()->addHours(7)->toDateTimeString();
+        $dateF = str_replace(':', '_', $date);
+
         $file = $validation['file'];
-        $fileName = $gname . '-' . $request->proker_name . '-' . time() . '-' . $file->getClientOriginalName();
+        $fileName = $gname . '-' . $request->proker_name . '-(' . $dateF . ')-' . $file->getClientOriginalName();
 
         $path = $file->storeAs('Proker/Proposed-Pending', $fileName);
         $visibility = Storage::getVisibility($path);
@@ -42,7 +46,12 @@ class ProkerProposeController extends Controller
             'proker_category' => $request->proker_category,
             'proker_detail' => $request->proker_detail,
             'proker_filename' => $fileName,
-            'proker_uid' => $rn
+            'proker_uid' => $rn,
+            'proker_submit_date'=> $date
+        ]);
+        $pending = DB::table('app-faculty_student-group')->where('unique_id',$check)->value('proker_pending_count');
+        DB::table('app-faculty_student-group')->where('unique_id',$check)->update([
+            'proker_pending_count' => $pending+1
         ]);
 
         $msg = 1;

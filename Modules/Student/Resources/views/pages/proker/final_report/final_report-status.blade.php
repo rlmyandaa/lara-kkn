@@ -97,7 +97,7 @@
                                     </table>
                                     @switch($rev_stat)
                                                 @case(0)
-                                                <a type="button" class="btn btn-primary" href={{ route('student.proker-list') }}>Upload Laporan</a>
+                                                <a type="button" class="btn btn-primary" href={{ route('student.proker-final_report-submission') }}>Upload Laporan</a>
                                                 @break
                                                 @case(4)
                                                 <a type="button" class="btn btn-warning" href={{ route('student.proker-list') }}>Revisi</a>

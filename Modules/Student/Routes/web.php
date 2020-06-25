@@ -11,7 +11,7 @@
 |
 */
 
-Route::group(['prefix' => 'student', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'student', 'middleware' => ['auth', 'activated', 'role:student', 'activity', 'twostep', 'checkblocked']], function () {
     Route::get('/', 'StudentController@index')->name('student.home');
 
     /*
@@ -50,7 +50,8 @@ Route::group(['prefix' => 'student', 'middleware' => 'auth'], function () {
         Route::get('/proker/list', 'ProkerController@list')->name('student.proker-list');
         //cancel pending proposal
         Route::get('/proker/list/prm/{id}', 'ProkerController@list_pending_remove')->name('student.proker-list-pending-remove');
-        Route::get('/proker/dl/{id}', 'ProkerController@download')->name('student.proker-download');
+        Route::get('/proker/dlp/{id}', 'ProkerController@getFilePending')->name('student.proker-getFilePending');
+        Route::get('/proker/dla/{id}', 'ProkerController@getFileAcc')->name('student.proker-getFileAcc');
     });
 
 
@@ -77,8 +78,16 @@ Route::group(['prefix' => 'student', 'middleware' => 'auth'], function () {
     Route::group([], function () {
         Route::get('/proker/final-report', 'FinalReportController@status')->name('student.proker-final_report');
         Route::get('/proker/final-report/submission', 'FinalReportController@submission')->name('student.proker-final_report-submission');
-        Route::post('/proker/final-report/submission/uplload', 'FinalReportController@upload')->name('student.proker-final_report-upload');
+        Route::post('/proker/final-report/submission/upload', 'FinalReportController@submission_upload')->name('student.proker-final_report-submission_upload');
+        
         Route::get('/proker/final-report/detail', 'FinalReportController@detail')->name('student.proker-final_report-detail');
-        Route::get('/proker/final-report/revision', 'FinalReportController@revision')->name('student.proker-final_report-revision');
+        
+        Route::get('/proker/final-report/revisi', 'FinalReportController@revision')->name('student.proker-final_report-revision');
+        Route::get('/proker/final-report/revisi/detail/{id}', 'FinalReportController@revision_detail')->name('student.proker-final_report-revision-detail');
+
+        Route::get('/proker/final-report/final_submission', 'FinalReportController@final_submission')->name('student.proker-final_report-final_submission');
+
+        Route::get('/proker/final-report/dl/{id}', 'FinalReportController@getFile')->name('student.proker-final_report-getFile');
+
     });
 });
