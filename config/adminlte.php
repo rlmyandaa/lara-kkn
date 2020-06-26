@@ -217,13 +217,13 @@ return [
         [
             'text' => 'Home',
             'url' => '/student',
-            'icon' => 'far fa-fw fa-file',
+            'icon' => 'far fa-fw fa fa-home',
             'roles' => 'student',
         ],
         [
             'text' => 'Home',
             'url' => '/dosen',
-            'icon' => 'far fa-fw fa-file',
+            'icon' => 'far fa-fw fas fa-user',
             'roles' => 'dosen',
         ],
 
@@ -231,13 +231,13 @@ return [
         [
             'text' => 'Profile',
             'url' => '/student/profile',
-            'icon' => 'far fa-fw fa-file',
+            'icon' => 'far fa-fw fas fa-user',
             'roles' => 'student',
         ],
         [
             'text' => 'Info Kelompok',
             'url' => '/student/group',
-            'icon' => 'far fa-fw fa-file',
+            'icon' => 'far fa-fw fas fa-users',
             'roles' => 'student',
         ],
         [
@@ -249,13 +249,13 @@ return [
         [
             'text' => 'Daftar Program Kerja',
             'url' => '/student/proker/list',
-            'icon' => 'far fa-fw fa-file',
+            'icon' => 'far fa-fw fas fa-briefcase',
             'roles' => 'student',
         ],
         [
             'text' => 'Pengajuan Program Kerja',
             'url' => '/student/proker/propose',
-            'icon' => 'far fa-fw fa-file',
+            'icon' => 'far fa-fw fas fa-bullhorn',
             'roles' => 'student',
         ],
         [
@@ -267,7 +267,7 @@ return [
         [
             'text' => 'Laporan Harian',
             'url' => '/student/proker/daily-report',
-            'icon' => 'far fa-fw fa-file',
+            'icon' => 'far fa-fw far fa-newspaper',
             'roles' => 'student',
         ],
         [
@@ -279,19 +279,19 @@ return [
         [
             'text' => 'Status Laporan Akhir',
             'url' => '/student/proker/final-report',
-            'icon' => 'far fa-fw fa-file',
+            'icon' => 'far fa-fw far fa-chart-bar',
             'roles' => 'student',
         ],
         [
             'text' => 'Revisi',
             'url' => '/student/proker/final-report/revisi',
-            'icon' => 'far fa-fw fa-file',
+            'icon' => 'far fa-fw fas fa-glasses',
             'roles' => 'student',
         ],
         [
             'text' => 'Pengumpulan',
             'url' => '/student/proker/final-report/final_submission',
-            'icon' => 'far fa-fw fa-file',
+            'icon' => 'far fa-fw fas fa-paper-plane',
             'roles' => 'student',
         ],
 
@@ -299,13 +299,13 @@ return [
         [
             'text' => 'Profile',
             'url' => '/dosen/profile',
-            'icon' => 'far fa-fw fa-file',
+            'icon' => 'far fa-fw fas fa-user',
             'roles' => 'dosen',
         ],
         [
             'text' => 'Kelompok Didik',
             'url' => '/dosen/student',
-            'icon' => 'far fa-fw fa-file',
+            'icon' => 'far fa-fw as fas fa-users',
             'roles' => 'dosen',
         ],
         [
@@ -318,21 +318,21 @@ return [
         [
             'text' => 'Program Kerja ',
             'url' => '/dosen/proker',
-            'icon' => 'far fa-fw fa-file',
+            'icon' => 'far fa-fw fas fa-briefcase',
             'roles' => 'dosen',
         ],
        
         [
             'text' => 'Laporan Harian ',
             'url' => '/dosen/dailyreport',
-            'icon' => 'far fa-fw fa-file',
+            'icon' => 'far fa-fw far fa-newspaper',
             'roles' => 'dosen',
         ],
        
         [
             'text' => 'Laporan Akhir ',
             'url' => '/dosen/finalreport',
-            'icon' => 'far fa-fw fa-file',
+            'icon' => 'far fa-fw fa-chart-bar',
             'roles' => 'dosen',
         ],
            

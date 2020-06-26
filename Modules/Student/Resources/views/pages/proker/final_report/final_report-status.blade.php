@@ -11,11 +11,7 @@
 <div class="card">
     <div class="card-header text-center">
         Status Laporan Akhir KKN<br />
-        <div class="card">
-            <div class="card-header">
-                @include('student::pages.proker.final_report.nav.final_report-nav')
-            </div>
-        </div>
+        
     </div>
     <div class="card-body">
 

@@ -38,8 +38,8 @@
             </select>
         </div>
         <div class="form-group">
-            <label>Jurusan</label>
-            <input type="text" class="form-control" name="jurusan" required="required" placeholder="Jurusan"> <br />
+            <label>Departemen</label>
+            <input type="text" class="form-control" name="jurusan" required="required" placeholder="Departemen"> <br />
         </div>
         <div class="form-group">
             <label>Nomor Telepon</label>

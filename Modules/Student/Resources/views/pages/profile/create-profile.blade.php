@@ -1,4 +1,4 @@
-@extends('modules.layouts.app')
+@extends('modules.layouts.app-unregistered_profile')
 
 @section('content')
 

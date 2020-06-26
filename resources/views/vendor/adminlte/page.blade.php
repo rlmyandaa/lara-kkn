@@ -69,3 +69,8 @@
     @stack('js')
     @yield('js')
 @stop
+
+@section('custom_js')
+    @stack('js_custom')
+    @yield('js_custom')
+@stop

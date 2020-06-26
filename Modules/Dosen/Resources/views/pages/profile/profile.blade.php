@@ -32,7 +32,7 @@
                 <td>{{ $d->faculty }}</td>
             </tr>
             <tr>
-                <td style="width: 15%">Program Studi</td>
+                <td style="width: 15%">Departemen</td>
                 <td>{{ $d->major }}</td>
             </tr>
             <tr>
