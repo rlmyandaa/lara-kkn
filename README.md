@@ -52,7 +52,7 @@ php artisan vendor:publish --tag=laravel2step
 
 
 # Live Demo
-**Demo URL : http://larakkn-com.stackstaging.com/users](http://larakkn-com.stackstaging.com/**
+**Demo URL : http://larakkn-com.stackstaging.com/**
 **Demo Account :**
 |Role|Email|Password|
 |:------------|:------------|:------------|
