@@ -19,7 +19,7 @@
                 <div class="card-body">
                     <table class="table">
                         <thead>
-                            <th>No</th>
+                            <th>Revisi ke-</th>
                             <th>Tanggal Submit</th>
                             <th>Status Revisi</th>
                             <th>Option</th>
@@ -31,9 +31,7 @@
                             @foreach($data as $data)
                             <tr>
                                 <td>
-                                    <?php
-                                    echo ($count = $count + 1);
-                                    ?>
+                                    {{ $data->fr_rev_count}}
                                 </td>
                                 <td>
                                     {{ $data->fr_submitted_date }}
@@ -44,34 +42,19 @@
                                 @break
 
                                 @case(1)
-                                <td style="color: orange;"> Laporan sedang ditinjau.</td>
+                                <td style="color: orange;"> Laporan diserahkan, menunggu ditinjau.</td>
                                 @break
 
                                 @case(2)
-                                @if($data->fr_rev_submitted===NULL || $data->fr_rev_submitted==0)
-                                <td style="color: orange;"> Revisi Diajukan, belum ditinjau.</td>
-                                @endif
-                                @if($data->fr_rev_submitted==1)
-                                <td style="color: green;"> Revisi Diajukan</td>
-                                @endif
+                                <td style="color: orange;"> Revisi Diajukan, menunggu ditinjau.</td>
                                 @break
 
                                 @case(3)
-                                @if($data->fr_rev_submitted===NULL || $data->fr_rev_submitted==0)
-                                <td style="color: orange;"> Revisi Diajukan, belum ditinjau.</td>
-                                @endif
-                                @if($data->fr_rev_submitted==1)
-                                <td style="color: green;"> Revisi Diajukan</td>
-                                @endif
+                                <td style="color: orange;"> Revisi Diajukan, sedang ditinjau.</td>
                                 @break
 
                                 @case(4)
-                                @if($data->fr_rev_submitted===NULL || $data->fr_rev_submitted==0)
-                                <td style="color: orange;"> Revisi Diajukan, belum ditinjau.</td>
-                                @endif
-                                @if($data->fr_rev_submitted==1)
-                                <td style="color: green;"> Revisi Diajukan</td>
-                                @endif
+                                <td style="color: orange;"> Revisi selesai ditinjau. Cek hasil tinjauan.</td>
                                 @break
 
                                 @case(5)
@@ -80,15 +63,17 @@
 
                                 @default
                                 @endswitch
+
                                 <td>
-                                    <a type="button" class="btn btn-primary" href='/student/proker/final-report/dl/{{ $data->fr_uid }}'>File Laporan</a>
                                     @switch($data->fr_rev_stat)
-                                    @case(4)
-                                    <a type="button" class="btn btn-warning">Ajukan Revisi</a>
+                                    @case(5)
+
                                     @break
                                     @default
-                                    @endswitch
                                     <a type="button" class="btn btn-primary" href='/student/proker/final-report/revisi/detail/{{ $data->fr_uid }}'>Detail</a>
+                                    @break
+                                    @endswitch
+                                    
                                 </td>
 
 

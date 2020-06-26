@@ -33,12 +33,12 @@ class FinalReportController extends Controller
 
     private function checkFR_rev($id): int
     {
-        $stat = DB::table('app-final_report')->where('group_uid', $id)->value('fr_rev_stat');
-        if ($stat === NULL) {
+        $stat = DB::table('app-final_report')->where('group_uid', $id)->orderBy('fr_rev_count','DESC')->first();
+        if ($stat->fr_rev_stat === NULL) {
             $stat = 0;
-            return $stat;
+            return $stat->fr_rev_stat;
         } else {
-            return $stat;
+            return $stat->fr_rev_stat;
         }
     }
 
@@ -145,18 +145,13 @@ class FinalReportController extends Controller
         $user = Auth::user();
         $user_id = $user['id'];
         $check = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_uid');
-        $data = DB::table('app-final_report')->where('group_uid', $check)->orderBy('fr_submitted_date', 'DESC')->get();
+        $data = DB::table('app-final_report')->where('group_uid', $check)->orderBy('fr_rev_count', 'DESC')->get();
  
         return view('student::pages.proker.final_report.revisi.final_report-revisi-index', ['data' => $data]);
     }
 
 
-    public function revision_detail($id)
-    {
-        echo "<script type='text/javascript'>
-                alert('In Progress');
-            </script>";
-    }
+    
 
     public function getFile($id)
     {
@@ -203,5 +198,13 @@ class FinalReportController extends Controller
         $dailyReportLast = self::getLastDailyReport($gid);
 
         return view('student::pages.proker.final_report.final_submission.final_report-final_submission',compact('member_data','mentor','groupName','groupLocation','proker_data', 'proker_count', 'dailyReportCount', 'dailyReportLast'));
+    }
+
+
+    public function revision_detail($id)
+    {
+        echo "<script type='text/javascript'>
+                alert('In Progress');
+            </script>";
     }
 }

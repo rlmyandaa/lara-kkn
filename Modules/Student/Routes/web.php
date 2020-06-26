@@ -52,6 +52,7 @@ Route::group(['prefix' => 'student', 'middleware' => ['auth', 'activated', 'role
         Route::get('/proker/list/prm/{id}', 'ProkerController@list_pending_remove')->name('student.proker-list-pending-remove');
         Route::get('/proker/dlp/{id}', 'ProkerController@getFilePending')->name('student.proker-getFilePending');
         Route::get('/proker/dla/{id}', 'ProkerController@getFileAcc')->name('student.proker-getFileAcc');
+        Route::get('/proker/dlr/{id}', 'ProkerController@getFileReject')->name('student.proker-getFileReject');
     });
 
 

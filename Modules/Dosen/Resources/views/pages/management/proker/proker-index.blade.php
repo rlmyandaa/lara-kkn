@@ -37,7 +37,7 @@
                                         <td>
                                             {{ $data->group_name }}
                                         </td>
-                                        
+
                                         @if($data->proker_acc_count===NULL)
                                         @if($data->proker_pending_count>0)
                                         <td style="color: orange;">
@@ -83,7 +83,7 @@
                 </div>
 
             </div>
-            <br/>
+            <br />
             <div>
                 <div class="card">
                     <div class="card-header">
@@ -126,7 +126,60 @@
 
                             </table>
                         </div>
-                        
+
+
+
+                    </div>
+                </div>
+
+            </div>
+            <br />
+            <div>
+                <div class="card">
+                    <div class="card-header">
+                        Daftar Proker Reject
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover table-bordered">
+                                <thead>
+                                    <th>No</th>
+                                    <th>Nama Kelompok</th>
+                                    <th>Judul Proposal</th>
+                                    <th>Keterangan Ditolak</th>
+                                    <th>File Proker</th>
+                                </thead>
+                                <?php
+                                $count = 0;
+                                ?>
+                                <tbody>
+                                    @foreach($rejectList as $pending)
+                                    <tr>
+                                        <td>
+                                            <?php
+                                            echo $count = $count + 1;
+                                            ?>
+                                        </td>
+                                        <td>
+                                            {{ $rejectListName[$count-1]}}
+                                        </td>
+                                        <td>
+                                            {{ $pending->proker_name }}
+                                        </td>
+                                        <td>
+                                            {{ $pending->proker_decline_comment }}
+                                        </td>
+                                        <td>
+                                            <a type="button" class="btn btn-primary" href="/dosen/proker/detail/dlr/{{ $pending->proker_filename }}">Download</a>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+
+
+                            </table>
+                        </div>
+
 
 
                     </div>

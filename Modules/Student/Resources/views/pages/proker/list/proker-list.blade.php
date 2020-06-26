@@ -84,6 +84,44 @@
                     </table>
                 </div>
             </div>
+            <br />
+            <div class="card">
+                <div class="card-header">
+                    Daftar Proposal Proker Reject
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <th>No</th>
+                            <th>Judul Proker</th>
+                            <th>Kategori</th>
+                            <th>Keterangan</th>
+                            <th>Option</th>
+                        </thead>
+                        <?php
+                        $count = 0;
+                        ?>
+                        <tbody>
+                            @foreach($ls_reject as $ls_p)
+                            <tr>
+                                <td>
+                                    <?php
+                                    echo ($count = $count + 1);
+                                    ?>
+                                </td>
+                                <td>{{ $ls_p->proker_name }}</td>
+                                <td>{{ $ls_p->proker_category }}</td>
+                                <td>{{ $ls_p->proker_decline_comment }}</td>
+                                <td>
+                                    <a type="button" class="btn-sm btn-success" href="/student/proker/dlr/{{ $ls_p->proker_filename }}">File Proker</a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 

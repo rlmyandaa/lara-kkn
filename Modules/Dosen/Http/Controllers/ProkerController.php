@@ -8,7 +8,8 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Input;
+use Carbon\Carbon;
+
 
 class ProkerController extends Controller
 {
@@ -20,13 +21,19 @@ class ProkerController extends Controller
     {
         $data = DB::table('app-faculty_student-group')->get();
         $pendingList = DB::table('app-proker-propose_pending')->get();
+        $rejectList = DB::table('app-proker-propose_reject')->get();
         $groupListName = array();
+        $rejectListName = array();
         foreach ($pendingList as $d) {
             $temp = DB::table('app-faculty_student-group')->where('unique_id', $d->group_uid)->value('group_name');
             array_push($groupListName, $temp);
         }
+        foreach ($rejectList as $r) {
+            $temp = DB::table('app-faculty_student-group')->where('unique_id', $r->group_uid)->value('group_name');
+            array_push($rejectListName, $temp);
+        }
 
-        return view('dosen::pages.management.proker.proker-index', compact('data', 'pendingList', 'groupListName'));
+        return view('dosen::pages.management.proker.proker-index', compact('data', 'pendingList', 'groupListName', 'rejectList', 'rejectListName'));
     }
 
     public function detail($id)
@@ -46,7 +53,14 @@ class ProkerController extends Controller
         return Storage::download($path);
     }
 
-    
+    public function getFileReject($id)
+    {
+        $fileName = $id;
+        $path = 'Proker/Rejected/' . $fileName;
+        return Storage::download($path);
+    }
+
+
 
 
     public function proposal_decide(Request $request)
@@ -60,7 +74,7 @@ class ProkerController extends Controller
 
             case 'returned':
                 Self::declined($uid, $request);
-                return redirect()->route('dosen.management-proker-detail', ['id' => $uid]);
+                return redirect()->route('dosen.management-proker');
                 break;
         }
     }
@@ -76,7 +90,6 @@ class ProkerController extends Controller
             'proker_filename' => $data->proker_filename,
             'proker_uid' => $data->proker_uid,
             'proker_submit_date' => $data->proker_submit_date,
-
         ]);
 
         DB::table('app-proker-propose_pending')->where('proker_uid', $uid)->delete();
@@ -84,8 +97,8 @@ class ProkerController extends Controller
         $pendingCount = DB::table('app-faculty_student-group')->where('unique_id', $data->group_uid)->value('proker_pending_count');
         $accCount = DB::table('app-faculty_student-group')->where('unique_id', $data->group_uid)->value('proker_acc_count');
         DB::table('app-faculty_student-group')->where('unique_id', $data->group_uid)->update([
-            'proker_pending_count' => $pendingCount-1,
-            'proker_acc_count' => $accCount+1
+            'proker_pending_count' => $pendingCount - 1,
+            'proker_acc_count' => $accCount + 1
         ]);
 
         $oldPath = 'Proker/Proposed-Pending/' . $data->proker_filename;
@@ -100,26 +113,39 @@ class ProkerController extends Controller
                 alert('Mohon isikan kolom komentar jika akan menolak program kerja.');
             </script>";
             $path = ('/dosen/proker/detail/') . $uid;
-        
-
         } else {
-            DB::table('app-proker-propose_pending')->where('proker_uid', $uid)->update([
-                'proker_decline_stat' => 1,
-                'proker_dosen_comment' => $request->proker_detail
+            $data = DB::table('app-proker-propose_pending')->where('proker_uid', $uid)->first();
+            DB::table('app-proker-propose_reject')->insert([
+                'group_uid' => $data->group_uid,
+                'proker_name' => $data->proker_name,
+                'proker_category' => $data->proker_category,
+                'proker_detail' => $data->proker_detail,
+                'proker_filename' => $data->proker_filename,
+                'proker_uid' => $data->proker_uid,
+                'proker_submit_date' => $data->proker_submit_date,
+                'proker_decline_comment' => $request->proker_comment
             ]);
+
+            DB::table('app-proker-propose_pending')->where('proker_uid', $uid)->delete();
+            $pendingCount = DB::table('app-faculty_student-group')->where('unique_id', $data->group_uid)->value('proker_pending_count');
+
+            DB::table('app-faculty_student-group')->where('unique_id', $data->group_uid)->update([
+                'proker_pending_count' => $pendingCount - 1,
+
+            ]);
+            $oldPath = 'Proker/Proposed-Pending/' . $data->proker_filename;
+            $newPath = 'Proker/Rejected/' . $data->proker_filename;
+            Storage::move($oldPath, $newPath);
+            Storage::setVisibility($newPath, 'public');
         }
     }
 
     public function group_detail($id)
     {
-        $dataPending = DB::table('app-proker-propose_pending')->where('group_uid',$id)->get();
-        $dataAcc = DB::table('app-proker-list')->where('group_uid',$id)->get();
-        $group_member = DB::table('app-faculty_student')->where('group_uid',$id)->get();
-        $gname = DB::table('app-faculty_student-group')->where('unique_id',$id)->value('group_name');
-        return view('dosen::pages.management.proker.detail.proker-group-detail',compact('dataAcc','dataPending','group_member','gname'));
-
+        $dataPending = DB::table('app-proker-propose_pending')->where('group_uid', $id)->get();
+        $dataAcc = DB::table('app-proker-list')->where('group_uid', $id)->get();
+        $group_member = DB::table('app-faculty_student')->where('group_uid', $id)->get();
+        $gname = DB::table('app-faculty_student-group')->where('unique_id', $id)->value('group_name');
+        return view('dosen::pages.management.proker.detail.proker-group-detail', compact('dataAcc', 'dataPending', 'group_member', 'gname'));
     }
-
-
-
 }

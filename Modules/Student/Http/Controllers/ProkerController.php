@@ -40,8 +40,8 @@ class ProkerController extends Controller
         
         $ls_pending = DB::table('app-proker-propose_pending')->where('group_uid', $check)->get();
         $ls_acc = DB::table('app-proker-list')->where('group_uid', $check)->get();
-        
-        return view('student::pages.proker.list.proker-list', compact('ls_pending','ls_acc'));
+        $ls_reject = DB::table('app-proker-propose_reject')->where('group_uid', $check)->get();
+        return view('student::pages.proker.list.proker-list', compact('ls_pending','ls_acc', 'ls_reject'));
     }
     public function list_pending_remove($id)
     {
@@ -72,6 +72,12 @@ class ProkerController extends Controller
     public function getFileAcc($id)
     {
         $path = 'Proker/Accepted/' . $id;
+        
+        return Storage::download($path);
+    }
+    public function getFileReject($id)
+    {
+        $path = 'Proker/Rejected/' . $id;
         
         return Storage::download($path);
     }
