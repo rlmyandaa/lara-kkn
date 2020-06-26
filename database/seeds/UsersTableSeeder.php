@@ -59,6 +59,7 @@ class UsersTableSeeder extends Seeder
             $user->attachRole($userRole);
             $user->save();
         }
+        
 
         // Seed test users
         // $user = factory(App\Models\Profile::class, 5)->create();
