@@ -40,9 +40,13 @@
                                         <td> {{ Carbon\Carbon::parse($data->fr_submitted_date)->translatedFormat('d F Y g:i:s ') }} </td>
                                     </tr>
                                     <tr>
+                                        <td style="width: 15%">Keterangan </td>
+                                        <td> {{ $data->fr_student_rev_comment }} </td>
+                                    </tr>
+                                    <tr>
                                         <td style="width: 15%">File Laporan</td>
                                         <td>
-                                            <a href="/dosen/proker/detail/dl/{{ $fileName }}"> {{ $data->fr_filename }}</a>
+                                            <a href="/dosen/finalreport/review/getfile/{{ $data->fr_uid }}"> {{ $data->fr_filename }}</a>
                                         </td>
                                     </tr>
                                     <tr>

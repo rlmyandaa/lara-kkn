@@ -17,6 +17,7 @@
                     </div>
                 </div>
                 <div class="card-body">
+
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="card">
@@ -68,12 +69,9 @@
                                                 @break
 
                                                 @case(2)
-                                                <td style="color: orange;"> Revisi Diajukan, belum ditinjau.</td>
+                                                <td style="color: orange;"> Revisi Diajukan, menunggu ditinjau.</td>
                                                 @break
 
-                                                @case(3)
-                                                <td style="color: orange;"> Revisi Diajukan, sedang ditinjau.</td>
-                                                @break
 
                                                 @case(4)
                                                 <td style="color: orange;"> Revisi selesai ditinjau, cek hasil tinjauan.</td>
@@ -88,24 +86,24 @@
                                                 @endswitch
 
                                             </tr>
-                                            
+
 
 
                                         </tbody>
-                                        
-                                        
+
+
                                     </table>
                                     @switch($rev_stat)
-                                                @case(0)
-                                                <a type="button" class="btn btn-primary" href={{ route('student.proker-final_report-submission') }}>Upload Laporan</a>
-                                                @break
-                                                @case(4)
-                                                <a type="button" class="btn btn-warning" href={{ route('student.proker-list') }}>Revisi</a>
-                                                @break
-                                                @default
-                                                
-                                                @break
-                                        @endswitch
+                                    @case(0)
+                                    <a type="button" class="btn btn-primary" href={{ route('student.proker-final_report-submission') }}>Upload Laporan</a>
+                                    @break
+                                    @case(4)
+                                    <a type="button" class="btn btn-warning" href={{ route('student.proker-final_report-revision') }}>Revisi</a>
+                                    @break
+                                    @default
+
+                                    @break
+                                    @endswitch
                                 </div>
                             </div>
 
@@ -143,6 +141,11 @@
                     </div>
                 </div>
             </div>
+            @if ($kkn_finish_stat == 1)
+            <div class="alert alert-success text-center">
+                <b>KKN TELAH SELESAI</b>
+            </div>
+            @endif
         </div>
 
 

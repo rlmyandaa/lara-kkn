@@ -36,23 +36,13 @@
                                 <td>
                                     {{ $data->fr_submitted_date }}
                                 </td>
-                                @switch($data->fr_rev_stat)
-                                @case(0)
-                                <td style="color: red;"> Belum Mengajukan Laporan</td>
-                                @break
-
-                                @case(1)
-                                <td style="color: orange;"> Laporan diserahkan, menunggu ditinjau.</td>
-                                @break
-
+                                @if($data->fr_revised == 1)
+                                <td style="color: orange;"> Revisi Diajukan</td>
+                                @else
+                                @switch($data->fr_rev_stat)                        
                                 @case(2)
-                                <td style="color: orange;"> Revisi Diajukan, menunggu ditinjau.</td>
+                                <td style="color: orange;"> Menunggu Tinjauan</td>
                                 @break
-
-                                @case(3)
-                                <td style="color: orange;"> Revisi Diajukan, sedang ditinjau.</td>
-                                @break
-
                                 @case(4)
                                 <td style="color: orange;"> Revisi selesai ditinjau. Cek hasil tinjauan.</td>
                                 @break
@@ -63,17 +53,21 @@
 
                                 @default
                                 @endswitch
+                                @endif
 
                                 <td>
-                                    @switch($data->fr_rev_stat)
-                                    @case(5)
+                                    @if ($data->fr_revised ==1)
 
-                                    @break
-                                    @default
+                                    @else
+                                    @switch($data->fr_rev_stat)
+                                    @case(4)
                                     <a type="button" class="btn btn-primary" href='/student/proker/final-report/revisi/detail/{{ $data->fr_uid }}'>Detail</a>
                                     @break
+                                    @default
+
+                                    @break
                                     @endswitch
-                                    
+                                    @endif
                                 </td>
 
 

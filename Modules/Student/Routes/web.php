@@ -80,15 +80,17 @@ Route::group(['prefix' => 'student', 'middleware' => ['auth', 'activated', 'role
         Route::get('/proker/final-report', 'FinalReportController@status')->name('student.proker-final_report');
         Route::get('/proker/final-report/submission', 'FinalReportController@submission')->name('student.proker-final_report-submission');
         Route::post('/proker/final-report/submission/upload', 'FinalReportController@submission_upload')->name('student.proker-final_report-submission_upload');
-        
+
         Route::get('/proker/final-report/detail', 'FinalReportController@detail')->name('student.proker-final_report-detail');
-        
+
         Route::get('/proker/final-report/revisi', 'FinalReportController@revision')->name('student.proker-final_report-revision');
         Route::get('/proker/final-report/revisi/detail/{id}', 'FinalReportController@revision_detail')->name('student.proker-final_report-revision-detail');
+        Route::post('/proker/final-report/revisi/submit', 'FinalReportController@revision_submit')->name('student.proker-final_report-revision_submit');
 
         Route::get('/proker/final-report/final_submission', 'FinalReportController@final_submission')->name('student.proker-final_report-final_submission');
 
         Route::get('/proker/final-report/dl/{id}', 'FinalReportController@getFile')->name('student.proker-final_report-getFile');
 
+        Route::post('/proker/final-report/final-submission/submit', 'FinalReportController@final_submission_submit')->name('student.proker-final_report-final_submission-submit');
     });
 });

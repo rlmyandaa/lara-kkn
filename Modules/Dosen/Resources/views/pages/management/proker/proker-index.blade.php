@@ -103,7 +103,7 @@
                                 ?>
 
                                 <tbody>
-                                    @foreach($pendingList as $pending)
+                                    @foreach($groupPendingName as $pendingname)
                                     <tr>
                                         <td>
                                             <?php
@@ -111,13 +111,13 @@
                                             ?>
                                         </td>
                                         <td>
-                                            {{ $groupListName[$count-1]}}
+                                            {{ $pendingname }}
                                         </td>
                                         <td>
-                                            {{ $pending->proker_name }}
+                                            {{ $prokerPendingName[$count-1] }}
                                         </td>
                                         <td>
-                                            <a type="button" class="btn btn-primary" href="/dosen/proker/detail/{{ $pending->proker_uid }}">Detail</a>
+                                            <a type="button" class="btn btn-primary" href="/dosen/proker/detail/{{ $prokerPendingUid[$count-1] }}">Detail</a>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -153,7 +153,7 @@
                                 $count = 0;
                                 ?>
                                 <tbody>
-                                    @foreach($rejectList as $pending)
+                                    @foreach($groupRejectName as $pendingname)
                                     <tr>
                                         <td>
                                             <?php
@@ -161,16 +161,16 @@
                                             ?>
                                         </td>
                                         <td>
-                                            {{ $rejectListName[$count-1]}}
+                                            {{ $pendingname }}
                                         </td>
                                         <td>
-                                            {{ $pending->proker_name }}
+                                            {{ $prokerRejectName[$count-1] }}
                                         </td>
                                         <td>
-                                            {{ $pending->proker_decline_comment }}
+                                            {{ $prokerRejectComment[$count-1] }}
                                         </td>
                                         <td>
-                                            <a type="button" class="btn btn-primary" href="/dosen/proker/detail/dlr/{{ $pending->proker_filename }}">Download</a>
+                                            <a type="button" class="btn btn-primary" href="/dosen/proker/detail/dlr/{{ $prokerRejectFileName[$count-1] }}">Download</a>
                                         </td>
                                     </tr>
                                     @endforeach

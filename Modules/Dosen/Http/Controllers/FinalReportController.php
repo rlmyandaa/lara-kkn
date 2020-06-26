@@ -31,7 +31,8 @@ class FinalReportController extends Controller
 
     private function checkFR_rev($id): int
     {
-        $stat = DB::table('app-final_report')->where('group_uid', $id)->value('fr_rev_stat');
+        $stat = DB::table('app-final_report')->where('group_uid', $id)->orderBy('fr_submitted_date', 'DESC')->first();
+        $stat = $stat->fr_rev_stat;
         if ($stat === NULL) {
             $stat = 0;
             return $stat;
@@ -86,8 +87,13 @@ class FinalReportController extends Controller
     private function submitAcc($id, $request)
     {
         $check = DB::table('app-final_report')->where('fr_uid', $id)->first();
-        DB::table('app-final_report')->update([
+        DB::table('app-final_report')->where('fr_uid', $id)->update([
             'fr_rev_stat' => 5,
+            'fr_acc_stat' => 1
+        ]);
+        $gid = $check->group_uid;
+        DB::table('app-faculty_student-group')->update([
+            'fr_acc_stat' => 1
         ]);
     }
 
@@ -99,11 +105,25 @@ class FinalReportController extends Controller
 
     public function index()
     {
-        $data = DB::table('app-faculty_student-group')->get();
+        $user = Auth::user();
+        $user_id = $user['id'];
+        $mentor_id = DB::table('app-faculty_dosen')->where('dosen_id', $user_id)->value('dosen_id');
+        $data = DB::table('app-faculty_student-group')->where('group_mentor_id', $mentor_id)->get();
         $lr_stat = array();
+
         foreach ($data as $d) {
-            $temp = DB::table('app-final_report')->where('group_uid', $d->unique_id)->value('fr_rev_stat');
-            array_push($lr_stat, $temp);
+            $tmp = array();
+            $temp = DB::table('app-final_report')->where('group_uid', $d->unique_id)->orderBy('fr_rev_count', 'DESC')->first();
+            if (empty($temp)) {
+                array_push($lr_stat, 0);
+            } else {
+                $result = (array) $temp;
+                foreach ($result as $s) {
+                    array_push($tmp, $s);
+                }
+                $i = $tmp[2];
+                array_push($lr_stat, $i);
+            }
         }
         return view('dosen::pages.management.finalreport.finalreport-index', compact('data', 'lr_stat'));
     }
@@ -167,5 +187,13 @@ class FinalReportController extends Controller
         }
     }
 
-    
+    public function group_getFile($id)
+    {
+
+        $gid = DB::table('app-final_report')->where('fr_uid', $id)->value('group_uid');
+        $gname = DB::table('app-faculty_student-group')->where('unique_id', $gid)->value('group_name');
+        $fileName = DB::table('app-final_report')->where('fr_uid', $id)->value('fr_filename');
+        $path = ('FinalReport/') . $gname . ('/') . $fileName;
+        return Storage::download($path);
+    }
 }

@@ -33,7 +33,7 @@ class FinalReportController extends Controller
 
     private function checkFR_rev($id): int
     {
-        $stat = DB::table('app-final_report')->where('group_uid', $id)->orderBy('fr_rev_count','DESC')->first();
+        $stat = DB::table('app-final_report')->where('group_uid', $id)->orderBy('fr_rev_count', 'DESC')->first();
         if ($stat->fr_rev_stat === NULL) {
             $stat = 0;
             return $stat->fr_rev_stat;
@@ -66,6 +66,17 @@ class FinalReportController extends Controller
         return $date;
     }
 
+    private function getFrStat($id)
+    {
+        $check = DB::table('app-faculty_student-group')->where('unique_id', $id)->value('fr_acc_stat');
+        return $check;
+    }
+
+    private function getKknStat($id)
+    {
+        $check = DB::table('app-faculty_student-group')->where('unique_id', $id)->value('kkn_finished_stat');
+        return $check;
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -90,8 +101,9 @@ class FinalReportController extends Controller
         $dailyReportCount = self::getDailyReportCount($gid);
         $dailyReportLast = self::getLastDailyReport($gid);
 
+        $kkn_finish_stat = self::getKknStat($gid);
 
-        return view('student::pages.proker.final_report.final_report-status', compact('rev_stat', 'prokerCount', 'dailyReportCount', 'dailyReportLast'));
+        return view('student::pages.proker.final_report.final_report-status', compact('rev_stat', 'prokerCount', 'dailyReportCount', 'dailyReportLast', 'kkn_finish_stat'));
     }
 
 
@@ -146,12 +158,12 @@ class FinalReportController extends Controller
         $user_id = $user['id'];
         $check = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_uid');
         $data = DB::table('app-final_report')->where('group_uid', $check)->orderBy('fr_rev_count', 'DESC')->get();
- 
+
         return view('student::pages.proker.final_report.revisi.final_report-revisi-index', ['data' => $data]);
     }
 
 
-    
+
 
     public function getFile($id)
     {
@@ -161,22 +173,12 @@ class FinalReportController extends Controller
         $check = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_uid');
         $gname = DB::table('app-faculty_student-group')->where('unique_id', $check)->value('group_name');
 
-        $fileName = DB::table('app-final_report')->where('fr_uid', $id)->value('fr_filename');
-        $path = ('FinalReport/').$gname.('/').$fileName;
+        $fileName = $id;
+        $path = ('FinalReport/') . $gname . ('/') . $fileName;
         return Storage::download($path);
     }
 
-    public function final_submission1()
-    {
-        $user = Auth::user();
-        $user_id = $user['id'];
-        $gid = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_uid');
 
-        $final_report_acc = DB::table('app-final_report')->where('fr_uid', $id)->value('fr_acc_stat');
-        $prokerCount = self::getProkerCount($gid);
-        $dailyReportCount = self::getDailyReportCount($gid);
-        $dailyReportLast = self::getLastDailyReport($gid);
-    }
 
     public function final_submission()
     {
@@ -191,20 +193,95 @@ class FinalReportController extends Controller
         $mentor = DB::table('app-faculty_dosen')->where('dosen_id', $mentor_id)->value('name');
 
         $member_data = DB::table('app-faculty_student')->where('group_uid', $gid)->orderBy('name', 'asc')->get();
-        
+
         $proker_data = DB::table('app-proker-list')->where('group_uid', $gid)->get();
         $proker_count = DB::table('app-faculty_student-group')->where('unique_id', $gid)->value('proker_acc_count');
         $dailyReportCount = self::getDailyReportCount($gid);
         $dailyReportLast = self::getLastDailyReport($gid);
 
-        return view('student::pages.proker.final_report.final_submission.final_report-final_submission',compact('member_data','mentor','groupName','groupLocation','proker_data', 'proker_count', 'dailyReportCount', 'dailyReportLast'));
+        $fr_stat = self::getFrStat($gid);
+        $kkn_finish_stat = self::getKknStat($gid);
+
+        return view('student::pages.proker.final_report.final_submission.final_report-final_submission', compact('member_data', 'mentor', 'groupName', 'groupLocation', 'proker_data', 'proker_count', 'dailyReportCount', 'dailyReportLast', 'fr_stat', 'kkn_finish_stat'));
     }
 
 
     public function revision_detail($id)
     {
+        $data = DB::table('app-final_report')->where('fr_uid', $id)->first();
+
+        $gname = DB::table('app-faculty_student-group')->where('unique_id', $data->group_uid)->value('group_name');
+        return view('student::pages.proker.final_report.revisi.final_report-revisi-detail', compact('data', 'gname'));
+    }
+
+    public function revision_submit(Request $request)
+    {
+        $validation = $request->validate([
+            'file'  =>  'required|file|mimes:pdf|max:5120'
+        ]);
+
+        $user = Auth::user();
+        $user_id = $user['id'];
+        $check = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_uid');
+        $gname = DB::table('app-faculty_student-group')->where('unique_id', $check)->value('group_name');
+
+        $data = DB::table('app-final_report')->where('fr_uid', $request->fr_uid)->first();
+
+        $dateS = Carbon::now()->addHours(7)->toDateTimeString();
+        $dateF = str_replace(':', '_', $dateS);
+
+        $file = $validation['file'];
+        $fileName = $gname . '-FinalReport' . '-REV-' . (($data->fr_rev_count) + 1) . '_(' . $dateF . ')-' . $file->getClientOriginalName();
+
+        $path = $file->storeAs('FinalReport/' . $gname, $fileName);
+        $visibility = Storage::getVisibility($path);
+        $rn = Str::random(35);
+        while (DB::table('app-final_report')->where('fr_uid', $rn)->exists()) {
+            $rn = Str::random(35);
+        }
+
+        DB::table('app-final_report')->insert([
+            'group_uid' => $check,
+            'fr_rev_stat' => 2,
+            'fr_filename' => $fileName,
+            'fr_submitted_date' => $dateS,
+            'fr_uid' => $rn,
+            'fr_rev_count' => ($data->fr_rev_count) + 1,
+            'fr_student_rev_comment' => $request->rev_comment
+        ]);
+        DB::table('app-final_report')->where('fr_uid', $request->fr_uid)->update([
+            'fr_revised' => 1
+        ]);
+
         echo "<script type='text/javascript'>
-                alert('In Progress');
+                alert('Revisi Diajukan.');
             </script>";
+        return redirect()->route('student.proker-final_report');
+    }
+
+    public function final_submission_submit(Request $request)
+    {
+        if ($request->agree == 1) {
+            $user = Auth::user();
+            $user_id = $user['id'];
+            $gid = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_uid');
+            $fr_stat = self::getFrStat($gid);
+            if ($fr_stat == 1) {
+                DB::table('app-faculty_student-group')->update([
+                    'kkn_finished_stat' => 1
+                ]);
+                return redirect()->route('student.proker-final_report-final_submission');
+            } else {
+                echo "<script type='text/javascript'>
+                alert('Laporan Belum ACC/Selesai.');
+            </script>";
+                return redirect()->route('student.proker-final_report-final_submission');
+            }
+        } else {
+            echo "<script type='text/javascript'>
+                alert('Mohon dicentang tombol pernyataan.');
+            </script>";
+            return redirect()->route('student.proker-final_report-final_submission');
+        }
     }
 }

@@ -20,7 +20,6 @@
                     <table class="table">
                         <thead></thead>
                         <tbody>
-
                             <tr>
                                 <td style="width: 40%; font-weight:bold;">Nama Kelompok</td>
                                 <td>{{ $groupName }}</td>
@@ -154,9 +153,14 @@
                             </tr>
                             <tr>
                                 <td style="width: 40%; font-weight:bold;">Status Laporan Akhir</td>
+                                @if ($fr_stat == 1)
+                                <td style="color:green;">Laporan ACC dan Selesai</td>
+                                @else
+                                <td>Laporan Belum ACC/Selesai</td>
+                                @endif
                             </tr>
                             <tr>
-                                <td>
+                                <td colspan="2">
                                     <div>
 
                                     </div>
@@ -164,18 +168,29 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div>
-                        <div class="alert alert-warning">
-                            <form>
-                                <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-                                <label for="vehicle1"> Dengan ini menyatakan laporan yang telah dibuat sudah benar dan segala kelengkapan data yang di submit telah sesuai.</label><br>
-
-                            </form>
-                        </div>
-                        <a type="button" class="btn btn-primary">Serahkan Laporan</a>
+                    @if ($kkn_finish_stat == 1)
+                    <div class="alert alert-success text-center">
+                        <b>KKN TELAH SELESAI</b>
                     </div>
+                    @else
+                    @if ($fr_stat ==1)
+                    <div>
+                        <form action="{{ route('student.proker-final_report-final_submission-submit') }}" method="POST">
+                            {{ csrf_field() }}
+                            <div class="form-group alert alert-warning">
+
+                                <input type="checkbox" name="agree" value="1">
+                                <label> Dengan ini menyatakan laporan yang telah dibuat sudah benar dan segala kelengkapan data yang di submit telah sesuai.</label><br>
+
+                            </div>
+                            <input type="submit" value="Serahkan Laporan" class="btn btn-primary">
+
+                        </form>
+                    </div>
+                    @endif
 
                 </div>
+                @endif
             </div>
         </div>
 

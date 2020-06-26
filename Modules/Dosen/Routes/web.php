@@ -86,5 +86,6 @@ Route::group(['prefix' => 'dosen', 'middleware' => ['auth', 'activated', 'role:d
         Route::get('/finalreport/review/{id}', 'FinalReportController@group_review')->name('dosen.management-finalreport-group-review');
         Route::get('/finalreport/review/detail/{id}', 'FinalReportController@group_review_detail')->name('dosen.management-finalreport-group-review-detail');
         Route::post('/finalreport/review/detail/submit', 'FinalReportController@group_review_submit')->name('dosen.management-finalreport-group-review-submit');
+        Route::get('/finalreport/review/getfile/{id}', 'FinalReportController@group_getFile')->name('dosen.management-finalreport-getfile');
     });
 });

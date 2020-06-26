@@ -17,7 +17,10 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $data=DB::table('app-faculty_student-group')->get();
+        $user = Auth::user();
+        $user_id = $user['id'];
+        $mentor_id = DB::table('app-faculty_dosen')->where('dosen_id', $user_id)->value('dosen_id');
+        $data=DB::table('app-faculty_student-group')->where('group_mentor_id', $mentor_id)->get();
         return view('dosen::pages.student.student',['data' => $data]);
     }
 

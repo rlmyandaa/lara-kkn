@@ -98,17 +98,17 @@
                                     </table>
                                     @switch($rev_stat)
                                     @case(1)
-                                    <a type="button" class="btn btn-warning" href=>Tinjau</a>
+                                    <a type="button" class="btn btn-warning" href={{ route('dosen.management-finalreport-group-review', ['id' => $gid ]) }}>Tinjau</a>
 
 
                                     @break
                                     @case(2)
-                                    <a type="button" class="btn btn-warning" href=>Tinjau</a>
+                                    <a type="button" class="btn btn-warning" href={{ route('dosen.management-finalreport-group-review', ['id' => $gid ]) }}>Tinjau</a>
 
 
                                     @break
                                     @case(3)
-                                    <a type="button" class="btn btn-warning" href=>Tinjau</a>
+                                    <a type="button" class="btn btn-warning" href={{ route('dosen.management-finalreport-group-review', ['id' => $gid ]) }}>Tinjau</a>
 
 
                                     @break
