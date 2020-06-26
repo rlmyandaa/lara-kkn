@@ -37,6 +37,6 @@ class UserController extends Controller
             return redirect('/student');
         }
 
-        return view('pages.user.home');
+        return view('home');
     }
 }

@@ -1,6 +1,12 @@
-@extends('modules.layouts.app')
+@extends('modules.layouts.app-f')
 
-@section('content')
+@section('pagetittle')
+<div>
+    Tambah Kelompok KKN
+</div>
+@endsection
+
+@section('contentori')
 <div>
 
     <form form action={{ route('dosen.student-group-store') }} method="post">

@@ -1,6 +1,12 @@
-@extends('modules.layouts.app')
+@extends('modules.layouts.app-f')
 
-@section('content')
+@section('pagetittle')
+<div>
+    Token Kelompok KKN
+</div>
+@endsection
+
+@section('contentori')
 
 <form action={{ route('dosen.student-group-token-update') }} method="post">
     <div>

@@ -1,6 +1,12 @@
-@extends('modules.layouts.app')
+@extends('modules.layouts.app-f')
 
-@section('content')
+@section('pagetittle')
+<div>
+    Edit Detail Kelompok
+</div>
+@endsection
+
+@section('contentori')
 
 
 @foreach ($data as $d)

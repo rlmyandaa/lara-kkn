@@ -1,6 +1,12 @@
-@extends('modules.layouts.app')
+@extends('modules.layouts.app-f')
 
-@section('content')
+@section('pagetittle')
+<div >
+Info Kelompok KKN
+</div>
+@endsection
+
+@section('contentori')
 
 <div class="card">
     <div class="card-header">
@@ -57,7 +63,7 @@
             </tbody>
             @endforeach
         </table>
-        <a type="button" class="btn btn-primary" href="">Edit Detail</a>
+
     </div>
 </div>
 <br />

@@ -1,7 +1,12 @@
-@extends('modules.layouts.app')
+@extends('modules.layouts.app-f')
 
-@section('content')
+@section('pagetittle')
+<div>
+    Edit Profil
+</div>
+@endsection
 
+@section('contentori')
 
 @foreach ($data as $d)
 <form action={{ route('dosen.profile-update') }} method="post">

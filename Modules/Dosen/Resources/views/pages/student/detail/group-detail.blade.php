@@ -1,6 +1,12 @@
-@extends('modules.layouts.app')
+@extends('modules.layouts.app-f')
 
-@section('content')
+@section('pagetittle')
+<div>
+    Detail Kelompok KKN
+</div>
+@endsection
+
+@section('contentori')
 
 
 <div>

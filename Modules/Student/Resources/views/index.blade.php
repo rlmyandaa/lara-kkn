@@ -1,7 +1,7 @@
-@extends('modules.layouts.app')
 
-@section('content')
+@extends('modules.layouts.app-f')
+@section('contentori')
 <div>
-    You are logged in from {!! config('student.name') !!} module
+    Selamat datang di portal manajemen LARA KKN.
 </div>
 @endsection
