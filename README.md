@@ -38,7 +38,7 @@ php artisan vendor:publish --tag=laravel2step
 ```
 7. From the projects root folder run `sudo chmod -R 755 ../laravel-auth`
 8. From the projects root folder run `php artisan key:generate`
-9. From the projects root folder, open db_table folder and import larakkn.sql to mysql database.
+9. From the projects root folder, open db_table folder and import larakkn.sql to mysql database
 10. From the projects root folder run `composer dump-autoload`
 11. From the projects root folder run `php artisan db:seed`
 12. From the projects root folder run `npm install`
