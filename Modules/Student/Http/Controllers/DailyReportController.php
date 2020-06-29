@@ -17,19 +17,39 @@ use Illuminate\Contracts\Encryption\DecryptException;
 
 class DailyReportController extends Controller
 {
+    private function check_assign(): bool
+    {
+        $user = Auth::user();
+        $user_id = $user['id'];
+        $data = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_uid');
+        if ($data === NULL) {
+
+            return false;
+        } else {
+            return true;
+        }
+    }
     /**
      * Display a listing of the resource.
      * @return Response
      */
     public function index()
     {
-        $user = Auth::user();
-        $user_id = $user['id'];
-        $check = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_uid');
+        if (self::check_assign()) {
+            $user = Auth::user();
+            $user_id = $user['id'];
+            $check = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_uid');
 
-        $daily_data = DB::table('app-daily_report')->where('group_uid', $check)->get();
+            $daily_data = DB::table('app-daily_report')->where('group_uid', $check)->get();
 
-        return view('student::pages.proker.daily_report.daily_report-index', ['daily_data' => $daily_data]);
+            return view('student::pages.proker.daily_report.daily_report-index', ['daily_data' => $daily_data]);
+        }
+        else {
+            echo "<script type='text/javascript'>
+            alert('Anda belum terhubung dengan kelompok, masukkan token terlebih dahulu.');
+        </script>";
+            return view('student::pages.group.group-assign');
+        }
     }
     public function add()
     {
@@ -127,17 +147,15 @@ class DailyReportController extends Controller
                 array_push($filePath, encrypt($temp));
             }
             $incI = 0;
-            
+
             for ($i = 0; $i < $fileCount; $i++) {
                 $files[$i][0] = $filePath[$i];
                 $files[$i][1] = $fileList[$i];
                 $incI++;
             }
-        } 
-        else {
+        } else {
             $files[0][0] = "Files not exist.";
             $files[0][1] = "Files not exist.";
-            
         }
         return view('student::pages.proker.daily_report.daily_report-detail', compact('data', 'gname', 'student', 'files', 'fileCount'));
     }
@@ -146,12 +164,10 @@ class DailyReportController extends Controller
     {
         try {
             $path = decrypt($id);
-            
         } catch (DecryptException $e) {
             abort(404, 'Files not found on server.');
         }
         return Storage::download($path);
-
     }
 
     public function delete($id)

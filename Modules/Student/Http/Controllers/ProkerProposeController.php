@@ -13,9 +13,29 @@ use Carbon\Carbon;
 
 class ProkerProposeController extends Controller
 {
+    private function check_assign(): bool
+    {
+        $user = Auth::user();
+        $user_id = $user['id'];
+        $data = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_uid');
+        if ($data === NULL) {
+
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public function propose()
     {
-        return view('student::pages.proker.propose.proker-propose');
+        if (self::check_assign()) {
+            return view('student::pages.proker.propose.proker-propose');
+        } else {
+            echo "<script type='text/javascript'>
+            alert('Anda belum terhubung dengan kelompok, masukkan token terlebih dahulu.');
+        </script>";
+            return view('student::pages.group.group-assign');
+        }
     }
     public function propose_upload(Request $request)
     {
@@ -36,7 +56,7 @@ class ProkerProposeController extends Controller
 
         $path = $file->storeAs('Proker/Proposed-Pending', $fileName);
         $visibility = Storage::getVisibility($path);
-        $rn=Str::random(35);
+        $rn = Str::random(35);
         while (DB::table('app-proker-propose_pending')->where('proker_uid', $rn)->exists()) {
             $rn = Str::random(35);
         }
@@ -47,11 +67,11 @@ class ProkerProposeController extends Controller
             'proker_detail' => $request->proker_detail,
             'proker_filename' => $fileName,
             'proker_uid' => $rn,
-            'proker_submit_date'=> $date
+            'proker_submit_date' => $date
         ]);
-        $pending = DB::table('app-faculty_student-group')->where('unique_id',$check)->value('proker_pending_count');
-        DB::table('app-faculty_student-group')->where('unique_id',$check)->update([
-            'proker_pending_count' => $pending+1
+        $pending = DB::table('app-faculty_student-group')->where('unique_id', $check)->value('proker_pending_count');
+        DB::table('app-faculty_student-group')->where('unique_id', $check)->update([
+            'proker_pending_count' => $pending + 1
         ]);
 
         $msg = 1;

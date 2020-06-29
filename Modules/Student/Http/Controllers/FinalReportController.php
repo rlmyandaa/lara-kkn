@@ -77,6 +77,18 @@ class FinalReportController extends Controller
         $check = DB::table('app-faculty_student-group')->where('unique_id', $id)->value('kkn_finished_stat');
         return $check;
     }
+    private function check_assign(): bool
+    {
+        $user = Auth::user();
+        $user_id = $user['id'];
+        $data = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_uid');
+        if ($data === NULL) {
+
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -85,25 +97,32 @@ class FinalReportController extends Controller
     */
     public function status()
     {
-        $user = Auth::user();
-        $user_id = $user['id'];
-        $gid = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_uid');
+        if (self::check_assign()) {
+            $user = Auth::user();
+            $user_id = $user['id'];
+            $gid = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_uid');
 
-        $fr_stat = 0;
-        $rev_stat = 0;
-        if (self::checkFR($gid)) {
-            $fr_stat = 1;
-            $rev_stat = self::checkFR_rev($gid);
+            $fr_stat = 0;
+            $rev_stat = 0;
+            if (self::checkFR($gid)) {
+                $fr_stat = 1;
+                $rev_stat = self::checkFR_rev($gid);
+            }
+
+
+            $prokerCount = self::getProkerCount($gid);
+            $dailyReportCount = self::getDailyReportCount($gid);
+            $dailyReportLast = self::getLastDailyReport($gid);
+
+            $kkn_finish_stat = self::getKknStat($gid);
+
+            return view('student::pages.proker.final_report.final_report-status', compact('rev_stat', 'prokerCount', 'dailyReportCount', 'dailyReportLast', 'kkn_finish_stat'));
+        } else {
+            echo "<script type='text/javascript'>
+            alert('Anda belum terhubung dengan kelompok, masukkan token terlebih dahulu.');
+        </script>";
+            return view('student::pages.group.group-assign');
         }
-
-
-        $prokerCount = self::getProkerCount($gid);
-        $dailyReportCount = self::getDailyReportCount($gid);
-        $dailyReportLast = self::getLastDailyReport($gid);
-
-        $kkn_finish_stat = self::getKknStat($gid);
-
-        return view('student::pages.proker.final_report.final_report-status', compact('rev_stat', 'prokerCount', 'dailyReportCount', 'dailyReportLast', 'kkn_finish_stat'));
     }
 
 
@@ -154,12 +173,19 @@ class FinalReportController extends Controller
 
     public function revision()
     {
-        $user = Auth::user();
-        $user_id = $user['id'];
-        $check = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_uid');
-        $data = DB::table('app-final_report')->where('group_uid', $check)->orderBy('fr_rev_count', 'DESC')->get();
+        if (self::check_assign()) {
+            $user = Auth::user();
+            $user_id = $user['id'];
+            $check = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_uid');
+            $data = DB::table('app-final_report')->where('group_uid', $check)->orderBy('fr_rev_count', 'DESC')->get();
 
-        return view('student::pages.proker.final_report.revisi.final_report-revisi-index', ['data' => $data]);
+            return view('student::pages.proker.final_report.revisi.final_report-revisi-index', ['data' => $data]);
+        } else {
+            echo "<script type='text/javascript'>
+            alert('Anda belum terhubung dengan kelompok, masukkan token terlebih dahulu.');
+        </script>";
+            return view('student::pages.group.group-assign');
+        }
     }
 
 
@@ -182,27 +208,39 @@ class FinalReportController extends Controller
 
     public function final_submission()
     {
-        $user = Auth::user();
-        $user_id = $user['id'];
-        $gid = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_uid');
+        if (self::check_assign()) {
+            $user = Auth::user();
+            $user_id = $user['id'];
+            $gid = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_uid');
 
-        $groupName = DB::table('app-faculty_student-group')->where('unique_id', $gid)->value('group_name');
-        $groupLocation = DB::table('app-faculty_student-group')->where('unique_id', $gid)->value('village_name');
 
-        $mentor_id = DB::table('app-faculty_student-group')->where('unique_id', $gid)->value('group_mentor_id');
-        $mentor = DB::table('app-faculty_dosen')->where('dosen_id', $mentor_id)->value('name');
+            $groupName = DB::table('app-faculty_student-group')->where('unique_id', $gid)->value('group_name');
+            $groupLocation = DB::table('app-faculty_student-group')->where('unique_id', $gid)->value('village_name');
 
-        $member_data = DB::table('app-faculty_student')->where('group_uid', $gid)->orderBy('name', 'asc')->get();
+            $mentor_id = DB::table('app-faculty_student-group')->where('unique_id', $gid)->value('group_mentor_id');
+            $mentor = DB::table('app-faculty_dosen')->where('dosen_id', $mentor_id)->value('name');
 
-        $proker_data = DB::table('app-proker-list')->where('group_uid', $gid)->get();
-        $proker_count = DB::table('app-faculty_student-group')->where('unique_id', $gid)->value('proker_acc_count');
-        $dailyReportCount = self::getDailyReportCount($gid);
-        $dailyReportLast = self::getLastDailyReport($gid);
+            $member_data = [];
+            if ($gid === NULL) {
+                $member_data = [];
+            } else {
+                $member_data = DB::table('app-faculty_student')->where('group_uid', $gid)->orderBy('name', 'asc')->get();
+            }
+            $proker_data = DB::table('app-proker-list')->where('group_uid', $gid)->get();
+            $proker_count = DB::table('app-faculty_student-group')->where('unique_id', $gid)->value('proker_acc_count');
+            $dailyReportCount = self::getDailyReportCount($gid);
+            $dailyReportLast = self::getLastDailyReport($gid);
 
-        $fr_stat = self::getFrStat($gid);
-        $kkn_finish_stat = self::getKknStat($gid);
+            $fr_stat = self::getFrStat($gid);
+            $kkn_finish_stat = self::getKknStat($gid);
 
-        return view('student::pages.proker.final_report.final_submission.final_report-final_submission', compact('member_data', 'mentor', 'groupName', 'groupLocation', 'proker_data', 'proker_count', 'dailyReportCount', 'dailyReportLast', 'fr_stat', 'kkn_finish_stat'));
+            return view('student::pages.proker.final_report.final_submission.final_report-final_submission', compact('member_data', 'mentor', 'groupName', 'groupLocation', 'proker_data', 'proker_count', 'dailyReportCount', 'dailyReportLast', 'fr_stat', 'kkn_finish_stat'));
+        } else {
+            echo "<script type='text/javascript'>
+            alert('Anda belum terhubung dengan kelompok, masukkan token terlebih dahulu.');
+        </script>";
+            return view('student::pages.group.group-assign');
+        }
     }
 
 

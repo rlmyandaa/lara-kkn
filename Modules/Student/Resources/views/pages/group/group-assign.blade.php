@@ -1,6 +1,12 @@
-@extends('modules.layouts.app')
+@extends('modules.layouts.app-f')
 
-@section('content')
+@section('pagetittle')
+<div>
+    Input Token Grup
+</div>
+@endsection
+
+@section('contentori')
 
 <form action={{ route('student.group-token-update') }} method="post">
 
