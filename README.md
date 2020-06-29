@@ -27,10 +27,7 @@
 # Instalation
 #### Laravel-Auth Step
 1. Run `git clone https://github.com/jeremykenedy/laravel-auth.git laravel-auth`
-2. Create a MySQL database for the project
-    * ```mysql -u root -p```, if using Vagrant: ```mysql -u homestead -psecret```
-    * ```create database laravelAuth;```
-    * ```\q```
+2. Create a new Database in mysql
 3. From the projects root run `cp .env.example .env`
 4. Configure your `.env` file
 5. Run `composer update` from the projects root folder
@@ -41,7 +38,7 @@ php artisan vendor:publish --tag=laravel2step
 ```
 7. From the projects root folder run `sudo chmod -R 755 ../laravel-auth`
 8. From the projects root folder run `php artisan key:generate`
-9. From the projects root folder run `php artisan migrate`
+9. From the projects root folder, open db_table folder and import larakkn.sql to mysql database.
 10. From the projects root folder run `composer dump-autoload`
 11. From the projects root folder run `php artisan db:seed`
 12. From the projects root folder run `npm install`
@@ -56,8 +53,8 @@ php artisan vendor:publish --tag=laravel2step
 **Demo Account :**
 |Role|Email|Password|
 |:------------|:------------|:------------|
-|Student|demo_student@larakkn.com|password|
-|Dosen|demo_dosen@larakkn.com|password|
+|Student|student_demo@larakkn.com|password|
+|Dosen|dosen_demo@larakkn.com|password|
 |Admin|admin@admin.com|password|
 
 
