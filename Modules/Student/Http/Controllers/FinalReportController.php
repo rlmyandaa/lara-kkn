@@ -62,7 +62,12 @@ class FinalReportController extends Controller
     private function getLastDailyReport($id)
     {
         $check = DB::table('app-daily_report')->orderBy('report_date', 'DESC')->first();
-        $date = $check->report_date;
+        $date = [];
+        if ($check === NULL) {
+            $date = 0;
+        } else {
+            $date = $check->report_date;
+        }
         return $date;
     }
 
@@ -188,7 +193,58 @@ class FinalReportController extends Controller
         }
     }
 
+    public function revision_detail($id)
+    {
+        $data = DB::table('app-final_report')->where('fr_uid', $id)->first();
 
+        $gname = DB::table('app-faculty_student-group')->where('unique_id', $data->group_uid)->value('group_name');
+        return view('student::pages.proker.final_report.revisi.final_report-revisi-detail', compact('data', 'gname'));
+    }
+
+    public function revision_submit(Request $request)
+    {
+        $validation = $request->validate([
+            'file'  =>  'required|file|mimes:pdf|max:5120'
+        ]);
+
+        $user = Auth::user();
+        $user_id = $user['id'];
+        $check = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_uid');
+        $gname = DB::table('app-faculty_student-group')->where('unique_id', $check)->value('group_name');
+
+        $data = DB::table('app-final_report')->where('fr_uid', $request->fr_uid)->first();
+
+        $dateS = Carbon::now()->addHours(7)->toDateTimeString();
+        $dateF = str_replace(':', '_', $dateS);
+
+        $file = $validation['file'];
+        $fileName = $gname . '-FinalReport' . '-REV-' . (($data->fr_rev_count) + 1) . '_(' . $dateF . ')-' . $file->getClientOriginalName();
+
+        $path = $file->storeAs('FinalReport/' . $gname, $fileName);
+        $visibility = Storage::getVisibility($path);
+        $rn = Str::random(35);
+        while (DB::table('app-final_report')->where('fr_uid', $rn)->exists()) {
+            $rn = Str::random(35);
+        }
+
+        DB::table('app-final_report')->insert([
+            'group_uid' => $check,
+            'fr_rev_stat' => 2,
+            'fr_filename' => $fileName,
+            'fr_submitted_date' => $dateS,
+            'fr_uid' => $rn,
+            'fr_rev_count' => ($data->fr_rev_count) + 1,
+            'fr_student_rev_comment' => $request->rev_comment
+        ]);
+        DB::table('app-final_report')->where('fr_uid', $request->fr_uid)->update([
+            'fr_revised' => 1
+        ]);
+
+        echo "<script type='text/javascript'>
+                alert('Revisi Diajukan.');
+            </script>";
+        return redirect()->route('student.proker-final_report');
+    }
 
 
     public function getFile($id)
@@ -244,58 +300,7 @@ class FinalReportController extends Controller
     }
 
 
-    public function revision_detail($id)
-    {
-        $data = DB::table('app-final_report')->where('fr_uid', $id)->first();
-
-        $gname = DB::table('app-faculty_student-group')->where('unique_id', $data->group_uid)->value('group_name');
-        return view('student::pages.proker.final_report.revisi.final_report-revisi-detail', compact('data', 'gname'));
-    }
-
-    public function revision_submit(Request $request)
-    {
-        $validation = $request->validate([
-            'file'  =>  'required|file|mimes:pdf|max:5120'
-        ]);
-
-        $user = Auth::user();
-        $user_id = $user['id'];
-        $check = DB::table('app-faculty_student')->where('student_id', $user_id)->value('group_uid');
-        $gname = DB::table('app-faculty_student-group')->where('unique_id', $check)->value('group_name');
-
-        $data = DB::table('app-final_report')->where('fr_uid', $request->fr_uid)->first();
-
-        $dateS = Carbon::now()->addHours(7)->toDateTimeString();
-        $dateF = str_replace(':', '_', $dateS);
-
-        $file = $validation['file'];
-        $fileName = $gname . '-FinalReport' . '-REV-' . (($data->fr_rev_count) + 1) . '_(' . $dateF . ')-' . $file->getClientOriginalName();
-
-        $path = $file->storeAs('FinalReport/' . $gname, $fileName);
-        $visibility = Storage::getVisibility($path);
-        $rn = Str::random(35);
-        while (DB::table('app-final_report')->where('fr_uid', $rn)->exists()) {
-            $rn = Str::random(35);
-        }
-
-        DB::table('app-final_report')->insert([
-            'group_uid' => $check,
-            'fr_rev_stat' => 2,
-            'fr_filename' => $fileName,
-            'fr_submitted_date' => $dateS,
-            'fr_uid' => $rn,
-            'fr_rev_count' => ($data->fr_rev_count) + 1,
-            'fr_student_rev_comment' => $request->rev_comment
-        ]);
-        DB::table('app-final_report')->where('fr_uid', $request->fr_uid)->update([
-            'fr_revised' => 1
-        ]);
-
-        echo "<script type='text/javascript'>
-                alert('Revisi Diajukan.');
-            </script>";
-        return redirect()->route('student.proker-final_report');
-    }
+    
 
     public function final_submission_submit(Request $request)
     {

@@ -11,7 +11,11 @@ use Illuminate\Support\Facades\Storage;
 
 class DailyReportController extends Controller
 {
-
+    /*
+    |--------------------------------------------------------------------------
+    | Private Function
+    |--------------------------------------------------------------------------
+    */
     private function getDailyReportCount($id): int
     {
         $count = DB::table('app-daily_report')->where('group_uid', $id)->count();
@@ -21,14 +25,21 @@ class DailyReportController extends Controller
     private function getLastDailyReport($id)
     {
         $check = DB::table('app-daily_report')->orderBy('report_date', 'DESC')->first();
-        $date = $check->report_date;
+        $date = [];
+        if ($check === NULL) {
+            $date = 0;
+        } else {
+            $date = $check->report_date;
+        }
         return $date;
     }
 
-    /**
-     * Display a listing of the resource.
-     * @return Response
-     */
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Public Function
+    |--------------------------------------------------------------------------
+    */
     public function index()
     {
         $user = Auth::user();
@@ -44,6 +55,7 @@ class DailyReportController extends Controller
             array_push($dailyReportCount, $reportCount);
             array_push($dailyReportLast, $reportLast);
         }
+     
 
         return view('dosen::pages.management.dailyreport.dailyreport-index', compact('data', 'dailyReportCount', 'dailyReportLast'));
     }
@@ -52,7 +64,7 @@ class DailyReportController extends Controller
     {
         $daily_data = DB::table('app-daily_report')->where('group_uid', $id)->get();
         $gname = DB::table('app-faculty_student-group')->where('unique_id', $id)->value('group_name');
-        return view('dosen::pages.management.dailyreport.detail.dailyreport-detail', compact('daily_data','gname'));
+        return view('dosen::pages.management.dailyreport.detail.dailyreport-detail', compact('daily_data', 'gname'));
     }
 
     public function daily_detail($id)
@@ -63,7 +75,7 @@ class DailyReportController extends Controller
         $sid = DB::table('app-daily_report')->where('report_uid', $id)->value('student_id');
         $student = DB::table('app-faculty_student')->where('nim', $sid)->value('name');
         $dateReport =  $gid = DB::table('app-daily_report')->where('report_uid', $id)->value('report_date');
-                
+
         $fileCount = DB::table('app-daily_report')->where('report_uid', $id)->value('report_filecount');
         $folderPath = DB::table('app-daily_report')->where('report_uid', $id)->value('report_folderpath');
         $filePath = [];
@@ -78,17 +90,15 @@ class DailyReportController extends Controller
                 array_push($filePath, encrypt($temp));
             }
             $incI = 0;
-            
+
             for ($i = 0; $i < $fileCount; $i++) {
                 $files[$i][0] = $filePath[$i];
                 $files[$i][1] = $fileList[$i];
                 $incI++;
             }
-        } 
-        else {
+        } else {
             $files[0][0] = "Files not exist.";
             $files[0][1] = "Files not exist.";
-            
         }
         return view('dosen::pages.management.dailyreport.detail.dailyreport-daily_detail', compact('data', 'gname', 'student', 'files', 'fileCount', 'dateReport'));
     }
@@ -97,11 +107,9 @@ class DailyReportController extends Controller
     {
         try {
             $path = decrypt($id);
-            
         } catch (DecryptException $e) {
             abort(404, 'Files not found on server.');
         }
         return Storage::download($path);
-
     }
 }

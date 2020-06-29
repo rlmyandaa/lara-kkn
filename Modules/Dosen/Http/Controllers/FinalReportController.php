@@ -61,7 +61,12 @@ class FinalReportController extends Controller
     private function getLastDailyReport($id)
     {
         $check = DB::table('app-daily_report')->orderBy('report_date', 'DESC')->first();
-        $date = $check->report_date;
+        $date = [];
+        if ($check === NULL) {
+            $date = 0;
+        } else {
+            $date = $check->report_date;
+        }
         return $date;
     }
 
