@@ -59,6 +59,6 @@ php artisan vendor:publish --tag=laravel2step
 
 
 
-**For Operational Purpose, registering student user could be done directly from Register menu. But for registering Dosen account recommended to be done from Admin user dashboard via Create New User menu.**
+**For Operational Purpose, registering student user could be done directly from Register menu. But for registering Dosen account recommended to be done from Admin user dashboard via Create New User menu using Admin. Or you could Register directly from Normal Register Link, but you need to set up the mailtrap or any valid mail server.**
 
 
