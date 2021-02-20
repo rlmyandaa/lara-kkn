@@ -36,7 +36,7 @@
 php artisan vendor:publish --tag=laravelroles &&
 php artisan vendor:publish --tag=laravel2step
 ```
-7. From the projects root folder run `sudo chmod -R 755 ../laravel-auth`
+7. From the projects root folder run `sudo chmod -R 755 ../lara-kkn`
 8. From the projects root folder run `php artisan key:generate`
 9. From the projects root folder, open db_table folder and import larakkn.sql to mysql database
 10. From the projects root folder run `composer dump-autoload`
