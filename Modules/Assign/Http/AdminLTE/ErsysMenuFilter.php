@@ -1,17 +1,20 @@
 <?php
 namespace Modules\Assign\Http\AdminLTE;
+
 use JeroenNoten\LaravelAdminLte\Menu\Builder;
 use JeroenNoten\LaravelAdminLte\Menu\Filters\FilterInterface;
 use Auth;
-class ErsysMenuFilter implements FilterInterface {
-    public function transform($item, Builder $builder) {
+
+class ErsysMenuFilter implements FilterInterface
+{
+    public function transform($item) {
         if(!$this->isVisible($item)){
             return false;
         }
         if(isset($item['header'])){
             $item = $item['header'];
         }
-        return$item;
+        return $item;
     }
     protected function isVisible($item) {
         //checkifuserisamemberofspecifiedrole(s)

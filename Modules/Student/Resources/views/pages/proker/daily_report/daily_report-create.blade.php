@@ -50,12 +50,8 @@
                         {{ csrf_field() }}
                         <div class="form-group">
                             <b>Tanggal Pelaksanaan</b><br />
-                            <input type="text" name="report_date" id="datepicker" width="276" />
-                            <script>
-                                $('#datepicker').datepicker({
-                                    format: 'yyyy-mm-dd'
-                                });
-                            </script>
+                            <input type="date" name="report_date" id="datepicker" width="276" />
+                            
                         </div>
                         <div class="form-group">
                             <b>Keterangan Laporan</b><br />
