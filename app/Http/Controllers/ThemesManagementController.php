@@ -6,7 +6,7 @@ use App\Models\Theme;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Validator;
-
+use App\Models\Profile;
 class ThemesManagementController extends Controller
 {
     /**
@@ -27,7 +27,11 @@ class ThemesManagementController extends Controller
     public function index()
     {
         $users = User::all();
-
+        for ($i = 0; $i<count($users); $i++){
+            $profile = Profile::find($users[$i]->profile);
+            $users[$i]->profile = $profile;
+        }
+        //dd($users);
         $themes = Theme::orderBy('name', 'asc')->get();
 
         return View('themesmanagement.show-themes', compact('themes', 'users'));
@@ -151,7 +155,10 @@ class ThemesManagementController extends Controller
     {
         $users = User::all();
         $themeUsers = [];
-
+        for ($i = 0; $i<count($users); $i++){
+            $profile = Profile::find($users[$i]->profile);
+            $users[$i]->profile = $profile;
+        }
         foreach ($users as $user) {
             if ($user->profile && $user->profile->theme_id === $theme->id) {
                 $themeUsers[] = $user;

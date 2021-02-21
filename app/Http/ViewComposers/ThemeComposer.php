@@ -5,6 +5,7 @@ namespace App\Http\ViewComposers;
 use App\Models\Theme;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Models\Profile;
 
 class ThemeComposer
 {
@@ -36,6 +37,8 @@ class ThemeComposer
             $user = $this->user;
 
             if ($user->profile) {
+                $profile = Profile::find($user->profile);
+                $user->profile = $profile;
                 $theme = Theme::find($user->profile->theme_id);
 
                 if ($theme->status === 0) {

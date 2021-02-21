@@ -62,14 +62,16 @@ class ProfilesController extends Controller
         } catch (ModelNotFoundException $exception) {
             abort(404);
         }
-
+        //dd(Profile::find($user->profile));
+        $profile = Profile::find($user->profile);
+        $user->profile = $profile;
         $currentTheme = Theme::find($user->profile->theme_id);
-
+        //dd($user->profile);
         $data = [
             'user'         => $user,
             'currentTheme' => $currentTheme,
         ];
-
+        //dd($user->profile['theme_id']);
         return view('profiles.show')->with($data);
     }
 
@@ -89,7 +91,8 @@ class ProfilesController extends Controller
                 ->with('error', trans('profile.notYourProfile'))
                 ->with('error_title', trans('profile.notYourProfileTitle'));
         }
-
+        $profile = Profile::find($user->profile);
+        $user->profile = $profile;
         $themes = Theme::where('status', 1)
                         ->orderBy('name', 'asc')
                         ->get();
