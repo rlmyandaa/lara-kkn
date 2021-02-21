@@ -36,7 +36,7 @@
 php artisan vendor:publish --tag=laravelroles &&
 php artisan vendor:publish --tag=laravel2step
 ```
-7. From the projects root folder run `sudo chmod -R 755 ../laravel-auth`
+7. From the projects root folder run `sudo chmod -R 755 ../lara-kkn`
 8. From the projects root folder run `php artisan key:generate`
 9. From the projects root folder, open db_table folder and import larakkn.sql to mysql database
 10. From the projects root folder run `composer dump-autoload`
@@ -49,7 +49,8 @@ php artisan vendor:publish --tag=laravel2step
 
 
 # Live Demo
-**Demo URL : http://larakkn-com.stackstaging.com/**
+**Demo URL : http://larakkn.l0wpass.site/**
+
 **Demo Account :**
 |Role|Email|Password|
 |:------------|:------------|:------------|
@@ -59,6 +60,6 @@ php artisan vendor:publish --tag=laravel2step
 
 
 
-**For Operational Purpose, registering student user could be done directly from Register menu. But for registering Dosen account recommended to be done from Admin user dashboard via Create New User menu.**
+**For Operational Purpose, registering student user could be done directly from Register menu. But for registering Dosen account recommended to be done from Admin user dashboard via Create New User menu using Admin. Or you could Register directly from Normal Register Link, but you need to set up the mailtrap or any valid mail server.**
 
 
