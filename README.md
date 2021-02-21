@@ -50,7 +50,7 @@ php artisan vendor:publish --tag=laravel2step
 
 # Live Demo
 **Demo URL : http://larakkn.l0wpass.site/**
-
+--
 **Demo Account :**
 |Role|Email|Password|
 |:------------|:------------|:------------|
